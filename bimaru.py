@@ -34,6 +34,8 @@ class BimaruState:
 
 class Board:
     """Representação interna de um tabuleiro de Bimaru."""
+    column_restritions = ()
+    row_restritions = ()
 
     def get_value(self, row: int, col: int) -> str:
         """Devolve o valor na respetiva posição do tabuleiro."""
@@ -64,6 +66,12 @@ class Board:
             > line = stdin.readline().split()
         """
         # TODO
+        str_row = input()
+        str_col = input()
+        numb_of_hints = int(input())
+        for e in range(5,-1, 2):
+            row_restritions = int(str_row[e])
+        
         pass
 
     # TODO: outros metodos da classe
