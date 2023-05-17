@@ -34,25 +34,25 @@ class BimaruState:
 
 class Board:
     """Representação interna de um tabuleiro de Bimaru."""
-    column_restritions = ()
-    row_restritions = ()
+
+    def __init__(self, column_restritions: tuple, row_restritions:tuple, boats: list[list[str]]):
+        self.column_restritions = column_restritions
+        self.row_restritions = row_restritions
+        self.boats = boats
 
     def get_value(self, row: int, col: int) -> str:
         """Devolve o valor na respetiva posição do tabuleiro."""
-        # TODO
-        pass
+        return self.boats[row][col]
 
     def adjacent_vertical_values(self, row: int, col: int) -> (str, str):
         """Devolve os valores imediatamente acima e abaixo,
         respectivamente."""
-        # TODO
-        pass
+        return (self.boats[row-1][col], self.boats[row+1][col])
 
     def adjacent_horizontal_values(self, row: int, col: int) -> (str, str):
         """Devolve os valores imediatamente à esquerda e à direita,
         respectivamente."""
-        # TODO
-        pass
+        return (self.boats[row][col-1], self.boats[row][col+1])
 
     @staticmethod
     def parse_instance():
