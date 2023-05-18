@@ -17,6 +17,8 @@ from search import (
     recursive_best_first_search,
 )
 
+board_size = 10
+
 
 class BimaruState:
     state_id = 0
@@ -42,17 +44,33 @@ class Board:
 
     def get_value(self, row: int, col: int) -> str:
         """Devolve o valor na respetiva posição do tabuleiro."""
+        if(row > board_size or row < 0 or col > board_size or col < 0):
+            return -1
         return self.grid[row][col]
 
     def adjacent_vertical_values(self, row: int, col: int) -> (str, str):
         """Devolve os valores imediatamente acima e abaixo,
         respectivamente."""
-        return (self.grid[row-1][col], self.grid[row+1][col])
+        if(row > board_size or row < 0 or col > board_size or col < 0):
+            return -1
+        elif(row == board_size):
+            return (self.grid[row-1][col], None)
+        elif(row == 0):
+            return (None, self.grid[row+1][col])
+        else:
+            return (self.grid[row-1][col], self.grid[row+1][col])
 
     def adjacent_horizontal_values(self, row: int, col: int) -> (str, str):
         """Devolve os valores imediatamente à esquerda e à direita,
         respectivamente."""
-        return (self.grid[row][col-1], self.grid[row][col+1])
+        if(row > board_size or row < 0 or col > board_size or col < 0):
+            return -1
+        elif(col == board_size):
+            return (self.grid[row][col-1], None)
+        elif(col == 0):
+            return (None, self.grid[row+1][col])
+        else:
+            return (self.grid[row][col-1], self.grid[row][col+1])
 
     @staticmethod
     def parse_instance():
