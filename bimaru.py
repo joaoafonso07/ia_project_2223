@@ -18,6 +18,7 @@ from search import (
 )
 
 board_size = 10
+boar_pieces = ('W', 'C', 'T', 'M', 'B', 'L', 'R')
 
 
 class BimaruState:
@@ -44,18 +45,18 @@ class Board:
 
     def get_value(self, row: int, col: int) -> str:
         """Devolve o valor na respetiva posição do tabuleiro."""
-        if(row > board_size or row < 0 or col > board_size or col < 0):
+        if row > board_size or row < 0 or col > board_size or col < 0:
             return -1
         return self.grid[row][col]
 
     def adjacent_vertical_values(self, row: int, col: int) -> (str, str):
         """Devolve os valores imediatamente acima e abaixo,
         respectivamente."""
-        if(row > board_size or row < 0 or col > board_size or col < 0):
+        if row > board_size or row < 0 or col > board_size or col < 0:
             return -1
-        elif(row == board_size):
+        elif row == board_size:
             return (self.grid[row-1][col], None)
-        elif(row == 0):
+        elif row == 0:
             return (None, self.grid[row+1][col])
         else:
             return (self.grid[row-1][col], self.grid[row+1][col])
@@ -63,11 +64,11 @@ class Board:
     def adjacent_horizontal_values(self, row: int, col: int) -> (str, str):
         """Devolve os valores imediatamente à esquerda e à direita,
         respectivamente."""
-        if(row > board_size or row < 0 or col > board_size or col < 0):
+        if row > board_size or row < 0 or col > board_size or col < 0:
             return -1
-        elif(col == board_size):
+        elif col == board_size:
             return (self.grid[row][col-1], None)
-        elif(col == 0):
+        elif col == 0:
             return (None, self.grid[row+1][col])
         else:
             return (self.grid[row][col-1], self.grid[row][col+1])
@@ -92,7 +93,10 @@ class Board:
 
         numb_of_hints = int(sys.stdin.readline())
 
-        grid = list[list[str]]
+        grid = []
+
+        for e in range(board_size):
+            grid.append(['.','.','.','.','.','.','.','.','.','.'])
 
         for e in range(numb_of_hints):
             hint = sys.stdin.readline().split
@@ -106,8 +110,7 @@ class Board:
 class Bimaru(Problem):
     def __init__(self, board: Board):
         """O construtor especifica o estado inicial."""
-        # TODO
-        pass
+        self.board = board
 
     def actions(self, state: BimaruState):
         """Retorna uma lista de ações que podem ser executadas a
@@ -127,8 +130,18 @@ class Bimaru(Problem):
         """Retorna True se e só se o estado passado como argumento é
         um estado objetivo. Deve verificar se todas as posições do tabuleiro
         estão preenchidas de acordo com as regras do problema."""
-        # TODO
-        pass
+        board = state.board
+        boat_pieces = [] #stores all the baot pices so we can then confirm if other gola restritions
+
+        for row in range(board_size):
+            for col in range(board_size):
+                target = board.grid[row][col]
+
+                if target == '.':
+                    return False
+                
+                if  target in boar_pieces and target != 'W':
+                    boat_pieces.append((target, row, col))                
 
     def h(self, node: Node):
         """Função heuristica utilizada para a procura A*."""
