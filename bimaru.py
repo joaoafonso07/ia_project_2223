@@ -35,24 +35,24 @@ class BimaruState:
 class Board:
     """Representação interna de um tabuleiro de Bimaru."""
 
-    def __init__(self, column_restritions: tuple, row_restritions:tuple, boats: list[list[str]]):
-        self.column_restritions = column_restritions
+    def __init__(self, row_restritions:tuple, column_restritions: tuple, grid: list[list[str]]):
         self.row_restritions = row_restritions
-        self.boats = boats
+        self.column_restritions = column_restritions
+        self.grid = grid
 
     def get_value(self, row: int, col: int) -> str:
         """Devolve o valor na respetiva posição do tabuleiro."""
-        return self.boats[row][col]
+        return self.grid[row][col]
 
     def adjacent_vertical_values(self, row: int, col: int) -> (str, str):
         """Devolve os valores imediatamente acima e abaixo,
         respectivamente."""
-        return (self.boats[row-1][col], self.boats[row+1][col])
+        return (self.grid[row-1][col], self.grid[row+1][col])
 
     def adjacent_horizontal_values(self, row: int, col: int) -> (str, str):
         """Devolve os valores imediatamente à esquerda e à direita,
         respectivamente."""
-        return (self.boats[row][col-1], self.boats[row][col+1])
+        return (self.grid[row][col-1], self.grid[row][col+1])
 
     @staticmethod
     def parse_instance():
@@ -66,13 +66,21 @@ class Board:
             > line = stdin.readline().split()
         """
         # TODO
-        str_row = input()
-        str_col = input()
-        numb_of_hints = int(input())
-        for e in range(5,-1, 2):
-            row_restritions = int(str_row[e])
+        str_row = sys.stdin.readline().split()
+        row_restritions = tuple(str_row[1:])
+
+        str_col = sys.stdin.readline().split()
+        column_restritions = tuple(str_col[1:])
+
+        numb_of_hints = int(sys.stdin.readline())
+
+        grid = list[list[str]]
+
+        for e in range(numb_of_hints):
+            hint = sys.stdin.readline().split
+            grid[hint[1]][hint[2]] = hint[3]
         
-        pass
+        return Board(row_restritions=row_restritions, column_restritions= column_restritions, grid=grid)
 
     # TODO: outros metodos da classe
 
