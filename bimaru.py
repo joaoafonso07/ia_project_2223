@@ -38,10 +38,11 @@ class BimaruState:
 class Board:
     """Representação interna de um tabuleiro de Bimaru."""
 
-    def __init__(self, row_restritions:tuple, column_restritions: tuple, grid: list[list[str]]):
+    def __init__(self, row_restritions:tuple, column_restritions: tuple, grid, available_boats):
         self.row_restritions = row_restritions
         self.column_restritions = column_restritions
         self.grid = grid
+        self.available_boats = available_boats
 
     def get_value(self, row: int, col: int) -> str:
         """Devolve o valor na respetiva posição do tabuleiro."""
@@ -49,7 +50,7 @@ class Board:
             return -1
         return self.grid[row][col]
 
-    def adjacent_vertical_values(self, row: int, col: int) -> (str, str):
+    def adjacent_vertical_values(self, row: int, col: int):
         """Devolve os valores imediatamente acima e abaixo,
         respectivamente."""
         if row > board_size or row < 0 or col > board_size or col < 0:
@@ -61,7 +62,7 @@ class Board:
         else:
             return (self.grid[row-1][col], self.grid[row+1][col])
 
-    def adjacent_horizontal_values(self, row: int, col: int) -> (str, str):
+    def adjacent_horizontal_values(self, row: int, col: int):
         """Devolve os valores imediatamente à esquerda e à direita,
         respectivamente."""
         if row > board_size or row < 0 or col > board_size or col < 0:
@@ -103,6 +104,13 @@ class Board:
             grid[hint[1]][hint[2]] = hint[3]
         
         return Board(row_restritions=row_restritions, column_restritions= column_restritions, grid=grid)
+    
+    def print(self):
+        for row in self.grid:
+            for i in row:
+                print(i)
+            print('\n')    
+
 
     # TODO: outros metodos da classe
 
@@ -131,7 +139,7 @@ class Bimaru(Problem):
         um estado objetivo. Deve verificar se todas as posições do tabuleiro
         estão preenchidas de acordo com as regras do problema."""
         board = state.board
-        boat_pieces = [] #stores all the baot pices so we can then confirm if other gola restritions
+        boat_pieces = [] #stores all the baot pices so we can then confirm if other goal restritions
 
         for row in range(board_size):
             for col in range(board_size):
