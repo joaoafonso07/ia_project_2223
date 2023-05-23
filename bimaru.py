@@ -20,6 +20,33 @@ from search import (
 board_size = 10
 boar_pieces = ('W', 'C', 'T', 'M', 'B', 'L', 'R')
 
+class BoardBoats:
+    boat_size = [4,3,2,1]    #Numero de squares por tamanho de barco, indice 0 corresponde ao maior e indice 3 ao menor
+    boat_count = [1,2,3,4]   #Numero de barcos por tabuleiro por tamanho, indice 0 corresponde ao maior e indice 3 ao menor
+
+    def __init__(self):
+        self.start_boats(self)
+
+    #Starta os barcos de um tabuleiro
+    def start_boats(self):  
+        boats = [Boat]
+        for i in range(3):
+            for j in range(self.boat_count(i)):
+                boats.append(Boat(self.boat_size(i)))
+        self.boats = boats
+    
+    def place_boat(self, size):
+        for boat in self.boats:
+            if boat.get_size == size and not boat.is_placed:
+                boat.place
+                return True
+        return False                
+
+    def all_placed(self):
+        for boat in self.boats:
+            if not boat.is_placed:
+                return False
+        return True
 
 class BimaruState:
     state_id = 0
@@ -32,17 +59,36 @@ class BimaruState:
     def __lt__(self, other):
         return self.id < other.id
 
-    # TODO: outros metodos da classe
+    # TODO: outros metodos da classez
+
+class Boat:
+    """Representação interna de um barco"""
+
+    def __init__(self, size):
+        self.placed = False
+        self.size = size
+        self.vertical = None 
+
+    def place(self, vertical):
+        self.placed = True
+        self.vertical = vertical
+    
+    def is_placed(self):
+        return self.placed   
+
+    def get_size(self):
+        return self.size 
 
 
 class Board:
     """Representação interna de um tabuleiro de Bimaru."""
 
-    def __init__(self, row_restritions:tuple, column_restritions: tuple, grid, available_boats):
+    def __init__(self, row_restritions:tuple, column_restritions: tuple, grid):
         self.row_restritions = row_restritions
         self.column_restritions = column_restritions
         self.grid = grid
-        self.available_boats = available_boats
+        self.boats = BoardBoats()
+
 
     def get_value(self, row: int, col: int) -> str:
         """Devolve o valor na respetiva posição do tabuleiro."""
@@ -105,6 +151,9 @@ class Board:
         
         return Board(row_restritions=row_restritions, column_restritions= column_restritions, grid=grid)
     
+    def boats_placed(self):
+        return self.boats.all_placed
+
     def print(self):
         for row in self.grid:
             for i in row:
@@ -118,7 +167,7 @@ class Board:
 class Bimaru(Problem):
     def __init__(self, board: Board):
         """O construtor especifica o estado inicial."""
-        self.board = board
+        self.board = Board.parse_instance
 
     def actions(self, state: BimaruState):
         """Retorna uma lista de ações que podem ser executadas a
@@ -139,7 +188,10 @@ class Bimaru(Problem):
         um estado objetivo. Deve verificar se todas as posições do tabuleiro
         estão preenchidas de acordo com as regras do problema."""
         board = state.board
-        boat_pieces = [] #stores all the baot pices so we can then confirm if other goal restritions
+        
+        return board.boats_placed
+        
+        """boat_pieces = [] #stores all the boat pices so we can then confirm if other goal restritions
 
         for row in range(board_size):
             for col in range(board_size):
@@ -150,7 +202,8 @@ class Bimaru(Problem):
                 
                 if  target in boar_pieces and target != 'W':
                     boat_pieces.append((target, row, col))                
-
+        """
+                    
     def h(self, node: Node):
         """Função heuristica utilizada para a procura A*."""
         # TODO
