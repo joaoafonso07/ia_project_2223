@@ -179,9 +179,10 @@ class Bimaru(Problem):
         available_boats = board.boats
 
         if available_boats['boat4'] != 0:
-              for row in range(board_size):
+            for row in range(board_size):
                 for col in range(board_size):
                     if board.row_restritions[row] >= 4:
+                        pass
 
 
     def result(self, state: BimaruState, action):
@@ -258,7 +259,7 @@ class Bimaru(Problem):
                     elif piece == 'T':
                         row_parts[row] += 1
                         col_parts[col] += 1
-                        board.grid[]
+                        
 
 
     def goal_test(self, state: BimaruState):
