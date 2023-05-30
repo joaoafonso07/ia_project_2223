@@ -115,7 +115,7 @@ class Board:
     def print(self):
         for row in self.grid:
             for i in row:
-                print(i)
+                print(i, end='')
             print('\n')
 
     # 1 if cell (row, col) contains symbol piece, 0 otherwise (x), -1 in case of error (x)
