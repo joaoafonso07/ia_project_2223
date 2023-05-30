@@ -92,10 +92,10 @@ class Board:
         """
         # TODO
         str_row = sys.stdin.readline().split()
-        row_restritions = tuple(str_row[1:])
+        row_restritions = tuple(map(int, str_row[1:]))
 
         str_col = sys.stdin.readline().split()
-        column_restritions = tuple(str_col[1:])
+        column_restritions = tuple(map(int, str_col[1:]))
 
         numb_of_hints = int(sys.stdin.readline())
 
@@ -105,8 +105,10 @@ class Board:
             grid.append(['.','.','.','.','.','.','.','.','.','.'])
 
         for e in range(numb_of_hints):
-            hint = sys.stdin.readline().split
-            grid[hint[1]][hint[2]] = hint[3]
+            hint = sys.stdin.readline().split()
+            row = int(hint[1])
+            col = int(hint[2])
+            grid[row][col] = hint[3]
         
         return Board(row_restritions=row_restritions, column_restritions= column_restritions, grid=grid)
     
