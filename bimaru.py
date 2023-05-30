@@ -23,6 +23,45 @@ board_pieces = ('W', 'C', 'T', 'M', 'B', 'L', 'R')
 
 def valid_coord(row, col):
     return row < board_size and row >= 0 and col < board_size and col >= 0
+
+def around_coord(row, col, P):
+    if P == 'C':
+        return ((row-1, col-1), (row-1, col), (row-1, col+1),
+                (row, col-1)                ,   (row, col+1),
+                (row+1, col-1), (row+1, col), (row+1, col+1))
+    
+    elif P == 'T':
+        return ((row-1, col-1), (row-1, col), (row-1, col+1),
+                (row, col-1)                ,   (row, col+1),
+                (row+1, col-1)              , (row+1, col+1),
+                (row+2, col-1)              , (row+2, col+1))
+    
+    elif P == 'B':
+        return ((row-2, col-1)              , (row-2, col+1),
+                (row-1, col-1)              , (row-1, col+1),
+                (row, col-1)                ,   (row, col+1),
+                (row+1, col-1), (row+1, col), (row+1, col+1))
+    
+    elif P == 'L':
+        return ((row-1, col-1), (row-1, col), (row-1, col+1), (row-1, col+2),
+                (row, col-1)                ,   
+                (row+1, col-1), (row+1, col), (row+1, col+1), (row+1, col+2))
+    
+    elif P == 'R':
+        return ((row-1, col-2), (row-1, col-1), (row-1, col), (row-1, col+1),
+                                                                (row, col+1),   
+                (row+1, col-2), (row+1, col-1), (row+1, col), (row+1, col+1))
+    
+    elif P == 'M':
+        return ((row-1, col-1)             , (row-1, col+1),
+                
+                (row+1, col-1)             , (row+1, col+1))
+    elif P == 'W':
+        return ()
+    else:
+        return -1
+    
+
          
 
 class BimaruState:
@@ -118,437 +157,21 @@ class Board:
 
             grid[row][col] = hint[3]
 
+            print(hint[3])
+
+            coord_to_water = around_coord(row, col, hint[3])
+
+            print(coord_to_water)
+
+            for coord in coord_to_water:
+                if valid_coord(coord[0], coord[1]):
+                    if grid[coord[0]][coord[1]] == '.':
+                        grid[coord[0]][coord[1]] = 'W'
+                    
+
         boats = {"boat1": 4, "boat2": 3, "boat3": 2, "boat4": 1}
 
-        for row in range(board_size):
-            for col in range(board_size):
-                piece = board.grid[row][col]
-                if piece == 'C':
-                    boats['boat1'] -= 1
-                    if row == 0:
-                        if col == 0:
-                            board.grid[row+1][col] = 'W'
-                            board.grid[row][col+1] = 'W'
-                            board.grid[row+1][col+1] = 'W'
-                        elif col == 9:
-                            board.grid[row+1][col] = 'W'
-                            board.grid[row][col-1] = 'W'
-                            board.grid[row+1][col-1] = 'W'
-                        else:
-                            board.grid[row][col-1] = 'W'
-                            board.grid[row][col+1] = 'W'
-                            board.grid[row+1][col] = 'W'
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row+1][col+1] = 'W'
-                    elif row == 9:
-                        if col == 0:
-                            board.grid[row-1][col] = 'W'
-                            board.grid[row][col+1] = 'W'
-                            board.grid[row-1][col+1] = 'W'
-                        elif col == 9:
-                            board.grid[row-1][col] = 'W'
-                            board.grid[row][col-1] = 'W'
-                            board.grid[row-1][col-1] = 'W'
-                        else:
-                            board.grid[row][col-1] = 'W'
-                            board.grid[row][col+1] = 'W'
-                            board.grid[row-1][col] = 'W'
-                            board.grid[row-1][col-1] = 'W'
-                            board.grid[row-1][col+1] = 'W'
-                    else:
-                        if col == 0:
-                            board.grid[row-1][col] = 'W'
-                            board.grid[row-1][col+1] = 'W'
-                            board.grid[row][col+1] = 'W'
-                            board.grid[row+1][col+1] = 'W'
-                            board.grid[row+1][col] = 'W'
-                        elif col == 9:
-                            board.grid[row-1][col] = 'W'
-                            board.grid[row-1][col-1] = 'W'
-                            board.grid[row][col-1] = 'W'
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row+1][col] = 'W'
-                        else:
-                            board.grid[row-1][col] = 'W'
-                            board.grid[row-1][col-1] = 'W'
-                            board.grid[row][col-1] = 'W'
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row+1][col] = 'W'
-                            board.grid[row+1][col+1] = 'W'
-                            board.grid[row][col+1] = 'W'
-                            board.grid[row-1][col+1] = 'W'
 
-                elif piece == 'T':
-                    if row == 0:
-                        if col == 0:
-                            board.grid[row][col+1] = 'W'
-                            board.grid[row+1][col+1] = 'W'
-                            board.grid[row+2][col+1] = 'W'
-                        elif col == 9:
-                            board.grid[row][col-1] = 'W'
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row+2][col-1] = 'W'
-                        else:
-                            board.grid[row][col-1] = 'W'
-                            board.grid[row][col+1] = 'W'
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row+1][col+1] = 'W'
-                            board.grid[row+2][col-1] = 'W'
-                            board.grid[row+2][col+1] = 'W'
-                    elif row == 8:
-                        if col == 0:
-                            board.grid[row-1][col] = 'W'
-                            board.grid[row-1][col+1] = 'W'
-                            board.grid[row][col+1] = 'W'
-                            board.grid[row+1][col+1] = 'W'
-                            board.grid[row+1][col] = 'B'
-                            boats['boat2'] -= 1
-                            
-                        elif col == 9:
-                            board.grid[row-1][col] = 'W'
-                            board.grid[row-1][col-1] = 'W'
-                            board.grid[row][col-1] = 'W'
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row+1][col] = 'B'
-                            boats['boat2'] -= 1
-                        else:
-                            board.grid[row-1][col+1] = 'W'
-                            board.grid[row-1][col] = 'W'
-                            board.grid[row-1][col-1] = 'W'
-                            board.grid[row][col-1] = 'W'
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row+1][col+1] = 'W'
-                            board.grid[row][col+1] = 'W'
-                            board.grid[row+1][col] = 'B'
-                            boats['boat2'] -= 1
-                    elif row == 9:
-                        return None
-                    else:
-                        if col == 0:
-                            board.grid[row-1][col] = 'W'
-                            board.grid[row-1][col+1] = 'W'
-                            board.grid[row][col+1] = 'W'
-                            board.grid[row+1][col+1] = 'W'
-                            board.grid[row+2][col+1] = 'W'
-                        elif col == 9:
-                            board.grid[row-1][col] = 'W'
-                            board.grid[row-1][col-1] = 'W'
-                            board.grid[row][col-1] = 'W'
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row+2][col-1] = 'W'
-                        else:
-                            board.grid[row-1][col-1] = 'W'
-                            board.grid[row-1][col] = 'W'
-                            board.grid[row-1][col+1] = 'W'
-                            board.grid[row][col-1] = 'W'
-                            board.grid[row][col+1] = 'W'
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row+1][col+1] = 'W'
-                            board.grid[row+2][col-1] = 'W'
-                            board.grid[row+2][col+1] = 'W'
-
-                elif piece == 'B':
-                    if row == 0:
-                        return None
-                    elif row == 1:
-                        if col == 0:
-                            board.grid[row+1][col] = 'W'
-                            board.grid[row+1][col+1] = 'W'
-                            board.grid[row][col+1] = 'W'
-                            board.grid[row-1][col+1] = 'W'
-                            board.grid[row-1][col] = 'T'
-                            boats['boat2'] -= 1
-                            
-                        elif col == 9:
-                            board.grid[row+1][col] = 'W'
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row][col-1] = 'W'
-                            board.grid[row-1][col-1] = 'W'
-                            board.grid[row-1][col] = 'T'
-                            boats['boat2'] -= 1
-                        else:
-                            board.grid[row+1][col+1] = 'W'
-                            board.grid[row+1][col] = 'W'
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row][col-1] = 'W'
-                            board.grid[row-1][col-1] = 'W'
-                            board.grid[row-1][col+1] = 'W'
-                            board.grid[row][col+1] = 'W'
-                            board.grid[row-1][col] = 'T'
-                            boats['boat2'] -= 1
-
-                    elif row == 9:
-                        if col == 0:
-                            board.grid[row][col+1] = 'W'
-                            board.grid[row-1][col+1] = 'W'
-                            board.grid[row-2][col+1] = 'W'
-                        elif col == 9:
-                            board.grid[row][col-1] = 'W'
-                            board.grid[row-1][col-1] = 'W'
-                            board.grid[row-2][col-1] = 'W'
-                        else:
-                            board.grid[row][col-1] = 'W'
-                            board.grid[row][col+1] = 'W'
-                            board.grid[row-1][col-1] = 'W'
-                            board.grid[row-1][col+1] = 'W'
-                            board.grid[row-2][col-1] = 'W'
-                            board.grid[row-2][col+1] = 'W'                       
-                    else:
-                        if col == 0:
-                            board.grid[row+1][col] = 'W'
-                            board.grid[row+1][col+1] = 'W'
-                            board.grid[row][col+1] = 'W'
-                            board.grid[row-1][col+1] = 'W'
-                            board.grid[row-2][col+1] = 'W'
-                        elif col == 9:
-                            board.grid[row+1][col] = 'W'
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row][col-1] = 'W'
-                            board.grid[row-1][col-1] = 'W'
-                            board.grid[row-2][col-1] = 'W'
-                        else:
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row+1][col] = 'W'
-                            board.grid[row+1][col+1] = 'W'
-                            board.grid[row][col-1] = 'W'
-                            board.grid[row][col+1] = 'W'
-                            board.grid[row-1][col-1] = 'W'
-                            board.grid[row-1][col+1] = 'W'
-                            board.grid[row-2][col-1] = 'W'
-                            board.grid[row-2][col+1] = 'W'
-
-                elif piece == 'L':
-                    if col == 0:
-                        if row == 0:
-                            board.grid[row+1][col] = 'W'
-                            board.grid[row+1][col+1] = 'W'
-                            board.grid[row+1][col+2] = 'W'
-                        elif row == 9:
-                            board.grid[row-1][col] = 'W'
-                            board.grid[row-1][col+1] = 'W'
-                            board.grid[row-1][col+2] = 'W'
-                        else:
-                            board.grid[row-1][col] = 'W'
-                            board.grid[row+1][col] = 'W'
-                            board.grid[row-1][col+1] = 'W'
-                            board.grid[row+1][col+1] = 'W'
-                            board.grid[row-1][col+2] = 'W'
-                            board.grid[row+1][col+2] = 'W'
-                    elif col == 8:
-                        if row == 0:
-                            board.grid[row][col-1] = 'W'
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row+1][col] = 'W'
-                            board.grid[row+1][col+1] = 'W'
-                            board.grid[row][col+1] = 'R'
-                            boats['boat2'] -= 1
-                            
-                        elif row == 9:
-                            board.grid[row][col-1] = 'W'
-                            board.grid[row-1][col-1] = 'W'
-                            board.grid[row-1][col] = 'W'
-                            board.grid[row-1][col+1] = 'W'
-                            board.grid[row][col+1] = 'R'
-                            boats['boat2'] -= 1
-                        else:
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row][col-1] = 'W'
-                            board.grid[row-1][col-1] = 'W'
-                            board.grid[row-1][col] = 'W'
-                            board.grid[row-1][col+1] = 'W'
-                            board.grid[row+1][col+1] = 'W'
-                            board.grid[row+1][col] = 'W'
-                            board.grid[row][col+1] = 'R'
-                            boats['boat2'] -= 1
-                    elif col == 9:
-                        return None
-                    else:
-                        if row == 0:
-                            board.grid[row][col-1] = 'W'
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row+1][col] = 'W'
-                            board.grid[row+1][col+1] = 'W'
-                            board.grid[row+1[col+2]] = 'W'
-                        elif row == 9:
-                            board.grid[row][col-1] = 'W'
-                            board.grid[row-1][col-1] = 'W'
-                            board.grid[row-1][col] = 'W'
-                            board.grid[row-1][col+1] = 'W'
-                            board.grid[row-1][col+2] = 'W'
-                        else:
-                            board.grid[row-1][col-1] = 'W'
-                            board.grid[row][col-1] = 'W'
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row-1][col] = 'W'
-                            board.grid[row+1][col] = 'W'
-                            board.grid[row-1][col+1] = 'W'
-                            board.grid[row+1][col+1] = 'W'
-                            board.grid[row-1][col+2] = 'W'
-                            board.grid[row+1][col+2] = 'W'
-
-                elif piece == 'R':
-                    if col == 0:
-                        return None
-                    
-                    elif col == 1:
-                        if row == 0:
-                            board.grid[row][col+1] = 'W'
-                            board.grid[row+1][col+1] = 'W'
-                            board.grid[row+1][col] = 'W'
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row][col-1] = 'L'
-                            boats['boat2'] -= 1
-                            
-                        elif row == 9:
-                            board.grid[row][col+1] = 'W'
-                            board.grid[row-1][col+1] = 'W'
-                            board.grid[row-1][col] = 'W'
-                            board.grid[row-1][col-1] = 'W'
-                            board.grid[row][col-1] = 'L'
-                            boats['boat2'] -= 1
-                        else:
-                            board.grid[row+1][col+1] = 'W'
-                            board.grid[row][col+1] = 'W'
-                            board.grid[row-1][col+1] = 'W'
-                            board.grid[row-1][col] = 'W'
-                            board.grid[row-1][col-1] = 'W'
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row+1][col] = 'W'
-                            board.grid[row][col-1] = 'R'
-
-                    if col == 9:
-                        if row == 0:
-                            board.grid[row+1][col] = 'W'
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row+1][col-2] = 'W'
-                        elif row == 9:
-                            board.grid[row-1][col] = 'W'
-                            board.grid[row-1][col-1] = 'W'
-                            board.grid[row-1][col-2] = 'W'
-                        else:
-                            board.grid[row-1][col] = 'W'
-                            board.grid[row+1][col] = 'W'
-                            board.grid[row-1][col-1] = 'W'
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row-1][col-2] = 'W'
-                            board.grid[row+1][col-2] = 'W'  
-                            boats['boat2'] -= 1
-                    
-                    else:
-                        if row == 0:
-                            board.grid[row][col+1] = 'W'
-                            board.grid[row+1][col+1] = 'W'
-                            board.grid[row+1][col] = 'W'
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row+1[col-2]] = 'W'
-                        elif row == 9:
-                            board.grid[row][col+1] = 'W'
-                            board.grid[row-1][col+1] = 'W'
-                            board.grid[row-1][col] = 'W'
-                            board.grid[row-1][col-1] = 'W'
-                            board.grid[row-1][col-2] = 'W'
-                        else:
-                            board.grid[row-1][col+1] = 'W'
-                            board.grid[row][col+1] = 'W'
-                            board.grid[row+1][col+1] = 'W'
-                            board.grid[row-1][col] = 'W'
-                            board.grid[row+1][col] = 'W'
-                            board.grid[row-1][col-1] = 'W'
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row-1][col-2] = 'W'
-                            board.grid[row+1][col-2] = 'W'    
-
-                elif piece == 'M':
-                    if row == 0:
-                        if col == 0 or col == 9:
-                            return None  
-                        elif col == 1:
-                            board.grid[row+1][col+1] = 'W'
-                            board.grid[row+1][col] = 'W'
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row][col-1] = 'L'
-                        elif col == 8:
-                            board.grid[row+1][col+1] = 'W'
-                            board.grid[row+1][col] = 'W'
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row][col+1] = 'R'
-                        else:
-                            board.grid[row+1][col+1] = 'W'
-                            board.grid[row+1][col] = 'W'
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row+1][col-2] = 'W'
-                            board.grid[row+1][col+2] = 'W'
-                            
-                        #NOT FINISHED [DOWN]
-
-                    elif row == 1:
-                        if col == 0:
-                            return None
-                            
-                        elif col == 9:
-                            return None
-                        else:
-                            board.grid[row+1][col+1] = 'W'
-                            board.grid[row+1][col] = 'W'
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row][col-1] = 'W'
-                            board.grid[row-1][col-1] = 'W'
-                            board.grid[row-1][col+1] = 'W'
-                            board.grid[row][col+1] = 'W'
-                            board.grid[row-1][col] = 'T'
-                            boats['boat2'] -= 1
-
-                    elif row == 8:
-                        if col == 0:
-                            board.grid[row-1][col] = 'W'
-                            board.grid[row-1][col+1] = 'W'
-                            board.grid[row][col+1] = 'W'
-                            board.grid[row+1][col+1] = 'W'
-                            board.grid[row+1][col] = 'B'
-                            boats['boat2'] -= 1
-                            
-                        elif col == 9:
-                            board.grid[row-1][col] = 'W'
-                            board.grid[row-1][col-1] = 'W'
-                            board.grid[row][col-1] = 'W'
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row+1][col] = 'B'
-                            boats['boat2'] -= 1
-                        else:
-                            board.grid[row-1][col+1] = 'W'
-                            board.grid[row-1][col] = 'W'
-                            board.grid[row-1][col-1] = 'W'
-                            board.grid[row][col-1] = 'W'
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row+1][col+1] = 'W'
-                            board.grid[row][col+1] = 'W'
-                            board.grid[row+1][col] = 'B'
-                            boats['boat2'] -= 1
-                    elif row == 9:
-                        return None
-                    else:
-                        if col == 0:
-                            board.grid[row-1][col] = 'W'
-                            board.grid[row-1][col+1] = 'W'
-                            board.grid[row][col+1] = 'W'
-                            board.grid[row+1][col+1] = 'W'
-                            board.grid[row+2][col+1] = 'W'
-                        elif col == 9:
-                            board.grid[row-1][col] = 'W'
-                            board.grid[row-1][col-1] = 'W'
-                            board.grid[row][col-1] = 'W'
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row+2][col-1] = 'W'
-                        else:
-                            board.grid[row-1][col-1] = 'W'
-                            board.grid[row-1][col] = 'W'
-                            board.grid[row-1][col+1] = 'W'
-                            board.grid[row][col-1] = 'W'
-                            board.grid[row][col+1] = 'W'
-                            board.grid[row+1][col-1] = 'W'
-                            board.grid[row+1][col+1] = 'W'
-                            board.grid[row+2][col-1] = 'W'
-                            board.grid[row+2][col+1] = 'W'           
         
         return Board(row_restritions = row_restritions, empty_in_row = empty_in_row, column_restritions = column_restritions, empty_in_col = empty_in_col, grid = grid, boats = boats)
     
