@@ -26,38 +26,38 @@ def valid_coord(row, col):
 
 def around_coord(row, col, P):
     if P == 'C':
-        return ((row-1, col-1), (row-1, col), (row-1, col+1),
+        return [(row-1, col-1), (row-1, col), (row-1, col+1),
                 (row, col-1)                ,   (row, col+1),
-                (row+1, col-1), (row+1, col), (row+1, col+1))
+                (row+1, col-1), (row+1, col), (row+1, col+1)]
     
     elif P == 'T':
-        return ((row-1, col-1), (row-1, col), (row-1, col+1),
+        return [(row-1, col-1), (row-1, col), (row-1, col+1),
                 (row, col-1)                ,   (row, col+1),
                 (row+1, col-1)              , (row+1, col+1),
-                (row+2, col-1)              , (row+2, col+1))
+                (row+2, col-1)              , (row+2, col+1)]
     
     elif P == 'B':
-        return ((row-2, col-1)              , (row-2, col+1),
+        return [(row-2, col-1)              , (row-2, col+1),
                 (row-1, col-1)              , (row-1, col+1),
                 (row, col-1)                ,   (row, col+1),
-                (row+1, col-1), (row+1, col), (row+1, col+1))
+                (row+1, col-1), (row+1, col), (row+1, col+1)]
     
     elif P == 'L':
-        return ((row-1, col-1), (row-1, col), (row-1, col+1), (row-1, col+2),
+        return [(row-1, col-1), (row-1, col), (row-1, col+1), (row-1, col+2),
                 (row, col-1)                ,   
-                (row+1, col-1), (row+1, col), (row+1, col+1), (row+1, col+2))
+                (row+1, col-1), (row+1, col), (row+1, col+1), (row+1, col+2)]
     
     elif P == 'R':
-        return ((row-1, col-2), (row-1, col-1), (row-1, col), (row-1, col+1),
+        return [(row-1, col-2), (row-1, col-1), (row-1, col), (row-1, col+1),
                                                                 (row, col+1),   
-                (row+1, col-2), (row+1, col-1), (row+1, col), (row+1, col+1))
+                (row+1, col-2), (row+1, col-1), (row+1, col), (row+1, col+1)]
     
     elif P == 'M':
-        return ((row-1, col-1)             , (row-1, col+1),
+        return [(row-1, col-1)             , (row-1, col+1),
                 
-                (row+1, col-1)             , (row+1, col+1))
+                (row+1, col-1)             , (row+1, col+1)]
     elif P == 'W':
-        return ()
+        return []
     else:
         return -1
     
@@ -81,43 +81,45 @@ class BimaruState:
 class Board:
     """Representação interna de um tabuleiro de Bimaru."""
     
-    def __init__(self, row_restritions:tuple, empty_in_row: list, column_restritions: tuple, empty_in_col: list, grid, boats):
-        self.row_restritions = row_restritions
-        self.empty_in_row = empty_in_row
-        self.column_restritions = column_restritions
-        self.empty_in_col = empty_in_col
+    def __init__(self, row_info: list, col_info: list, grid, boats):
+        self.row_info = row_info # row_info = [[row_restrition, empty_in_row, pieces_in_row], ...]
+        self.col_info = col_info # col_info = [[col_restrition, empty_in_col, pieces_in_col], ...]
         self.grid = grid
         self.boats = boats
+
 
     def get_value(self, row: int, col: int) -> str:
         """Devolve o valor na respetiva posição do tabuleiro."""
         if not valid_coord(row, col):
             return -1
         return self.grid[row][col]
+    
 
-    def adjacent_vertical_values(self, row: int, col: int):
-        """Devolve os valores imediatamente acima e abaixo,
-        respectivamente."""
+    def adjacent_values(self, row: int, col: int):
+        """Devolve um tuplo com os valores que rodeiam a celula."""
         if not valid_coord(row, col):
             return -1
-        elif row == board_size:
-            return (self.grid[row-1][col], None)
-        elif row == 0:
-            return (None, self.grid[row+1][col])
-        else:
-            return (self.grid[row-1][col], self.grid[row+1][col])
+        P = self.grid[row, col]
+        adjacent_values = around_coord(row, col, P)
+        for coord in adjacent_values:
+            coord_row = coord[0]
+            coord_col = coord[1]
+            if not valid_coord[coord_row, coord_col]:
+                adjacent_values.remove[(coord_row, coord_col)]
+        return adjacent_values
+    
+    def water_lines(self):
+        """Preenche com 'W' (água) todas as linhas em que o 
+        número de peças for igual à restrição dessa linha aka
+        não caberem mais peças"""
+        for row in range(board_size):
+            for col in range(board_size):
+                if self.grid[row][col] == '.':
+                    if self.row_info[row][0] == self.row_info[row][2] or self.col_info[col][0] == self.col_info[col][2]:
+                        self.grid[row][col] = 'W'
+                        self.row_info[row][1] -= 1
+                        self.col_info[col][1] -= 1
 
-    def adjacent_horizontal_values(self, row: int, col: int):
-        """Devolve os valores imediatamente à esquerda e à direita,
-        respectivamente."""
-        if not valid_coord(row, col):
-            return -1
-        elif col == board_size:
-            return (self.grid[row][col-1], None)
-        elif col == 0:
-            return (None, self.grid[row+1][col])
-        else:
-            return (self.grid[row][col-1], self.grid[row][col+1])
 
     @staticmethod
     def parse_instance():
@@ -138,42 +140,53 @@ class Board:
 
         numb_of_hints = int(sys.stdin.readline())
 
+        row_info = []
+        col_info = []
+
         grid = []
 
         for e in range(board_size):
             grid.append(['.','.','.','.','.','.','.','.','.','.'])
+            row_info.append([row_restritions[e], 10, 0])
+            col_info.append([column_restritions[e], 10, 0])
 
-        empty_in_row = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
-        empty_in_col = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
 
         for e in range(numb_of_hints):
             hint = sys.stdin.readline().split()
 
             row = int(hint[1])
-            empty_in_row[row] -= 1
-
             col = int(hint[2])
-            empty_in_col[col] -= 1
-
+            
             grid[row][col] = hint[3]
 
-            print(hint[3])
+            row_info[row][1] -= 1
+            col_info[col][1] -= 1
+
+            if hint[3] != 'W':
+                row_info[row][2] += 1
+                col_info[col][2] += 1
 
             coord_to_water = around_coord(row, col, hint[3])
-
-            print(coord_to_water)
 
             for coord in coord_to_water:
                 if valid_coord(coord[0], coord[1]):
                     if grid[coord[0]][coord[1]] == '.':
                         grid[coord[0]][coord[1]] = 'W'
+                        row_info[coord[0]][1] -= 1
+                        col_info[coord[1]][1] -= 1
                     
-
         boats = {"boat1": 4, "boat2": 3, "boat3": 2, "boat4": 1}
 
+        for row in range(board_size):
+            for col in range(board_size):
+                if grid[row][col] == '.':
+                    if row_info[row][0] == row_info[row][2] or col_info[col][0] == col_info[col][2]:
+                        grid[row][col] = 'W'
+                        row_info[row][1] -= 1
+                        col_info[col][1] -= 1
+                    
 
-        
-        return Board(row_restritions = row_restritions, empty_in_row = empty_in_row, column_restritions = column_restritions, empty_in_col = empty_in_col, grid = grid, boats = boats)
+        return Board(row_info = row_info, col_info = col_info, grid = grid, boats = boats)
     
     def print(self):
         for row in self.grid:
