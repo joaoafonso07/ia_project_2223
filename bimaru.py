@@ -16,6 +16,7 @@ from search import (
     greedy_search,
     recursive_best_first_search,
 )
+import copy
 
 board_size = 10
 board_pieces = ('W', 'C', 'T', 'M', 'B', 'L', 'R')
@@ -128,12 +129,14 @@ class Board:
             starting_points = []
             if self.row_info[row][0] >= 4:
                 if self.row_info[row][1] + self.row_info[row][2] >= 4:                    
-                    possible_sublists =(['.', '.', '.', '.'], ['L', '.', '.', '.'], ['L', '.', '.', '.'],
-                                        ['L', '.', '.', '.'], ['.', 'M', '.', '.'], ['L', 'M', '.', '.'],  
-                                        ['.', 'M', 'M', '.'], ['L', 'M', 'M', '.'], ['.', 'M', 'M', 'R'],  
-                                        ['L', 'M', 'M', 'R'], ['.', 'M', '.', 'R'], ['L', 'M', '.', 'R'], 
-                                            ['.', '.', 'M', 'R'], ['L', '.', 'M', 'R'], ['.', '.', '.', 'R'],  
-                                        ['L', '.', '.', 'R'], ['.', '.', 'M', '.'], ['L', '.', 'M', '.'])
+                    possible_sublists =(['.', '.', '.', '.'], ['L', '.', '.', '.'],
+                                        ['.', 'M', '.', '.'], ['L', 'M', '.', '.'],  
+                                        ['.', 'M', 'M', '.'], ['L', 'M', 'M', '.'], 
+                                        ['.', 'M', 'M', 'R'], ['L', '.', '.', 'R'],  
+                                        ['.', 'M', '.', 'R'], ['L', 'M', '.', 'R'], 
+                                        ['.', '.', 'M', 'R'], ['L', '.', 'M', 'R'],  
+                                        ['.', '.', '.', 'R'], ['L', '.', 'M', '.'], 
+                                        ['.', '.', 'M', '.'])
                     target = self.get_row(row)
                     for n in range(5):
                         if target[n: n+4] in possible_sublists:
@@ -147,12 +150,13 @@ class Board:
             starting_points = []
             if self.col_info[col][0] >= 4:
                 if self.col_info[col][1] + self.col_info[col][2] >= 4:                    
-                    possible_sublists =(['.', '.', '.', '.'], ['T', '.', '.', '.'], ['T', '.', '.', '.'],
-                                        ['T', '.', '.', '.'], ['.', 'M', '.', '.'], ['T', 'M', '.', '.'],  
-                                        ['.', 'M', 'M', '.'], ['T', 'M', 'M', '.'], ['.', 'M', 'M', 'B'],  
-                                        ['T', 'M', 'M', 'B'], ['.', 'M', '.', 'B'], ['T', 'M', '.', 'B'], 
-                                        ['.', '.', 'M', 'B'], ['T', '.', 'M', 'B'], ['.', '.', '.', 'B'],  
-                                        ['T', '.', '.', 'B'], ['.', '.', 'M', '.'], ['T', '.', 'M', '.'])
+                    possible_sublists =(['.', '.', '.', '.'], ['T', '.', '.', '.'], 
+                                        ['.', 'M', '.', '.'], ['T', 'M', '.', '.'],
+                                        ['.', 'M', 'M', '.'], ['T', 'M', 'M', '.'],   
+                                        ['.', '.', 'M', '.'], ['T', '.', 'M', '.'], 
+                                        ['.', 'M', '.', 'B'], ['T', 'M', '.', 'B'],
+                                        ['.', '.', 'M', 'B'], ['T', '.', 'M', 'B'],
+                                        ['.', 'M', 'M', 'B'])
                     target = self.get_col(col)
                     for n in range(5):
                         if target[n: n+4] in possible_sublists:
@@ -168,9 +172,9 @@ class Board:
             if self.row_info[row][0] >= 3:
                 if self.row_info[row][1] + self.row_info[row][2] >= 3:
                     possible_sublists =(['.', 'M', '.'], ['L', 'M', '.'],   
-                                        ['.', 'M', 'R'], ['L', 'M', 'R'],
                                         ['.', '.', '.'], ['L', '.', '.'],  
-                                        ['.', '.', 'R'], ['L', '.', 'R'])                       
+                                        ['.', '.', 'R'], ['L', '.', 'R'],
+                                        ['.', 'M', 'R'])                       
                     target = self.get_row(row)
                     for n in range(8):
                         if target[n: n+3] in possible_sublists:
@@ -185,9 +189,9 @@ class Board:
             if self.col_info[col][0] >= 3:
                 if self.col_info[col][1] + self.col_info[col][2] >= 3:                    
                     possible_sublists =(['.', 'M', '.'], ['T', 'M', '.'],   
-                                        ['.', 'M', 'B'], ['T', 'M', 'B'],
                                         ['.', '.', '.'], ['T', '.', '.'],  
-                                        ['.', '.', 'B'], ['T', '.', 'B'])                       
+                                        ['.', '.', 'B'], ['T', '.', 'B'],
+                                        ['.', 'M', 'B'])                       
                     target = self.get_col(col)
                     for n in range(8):
                         if target[n: n+3] in possible_sublists:
@@ -203,7 +207,7 @@ class Board:
             if self.row_info[row][0] >= 2:
                 if self.row_info[row][1] + self.row_info[row][2] >= 2:
                     possible_sublists =(['.', '.'], ['L', '.'],   
-                                        ['.', 'R'], ['L', 'R'])                       
+                                        ['.', 'R'])                       
                     target = self.get_row(row)
                     for n in range(9):
                         if target[n: n+2] in possible_sublists:
@@ -218,7 +222,7 @@ class Board:
             if self.col_info[col][0] >= 2:
                 if self.col_info[col][1] + self.col_info[col][2] >= 2:
                     possible_sublists =(['.', '.'], ['T', '.'],   
-                                        ['.', 'B'], ['T', 'B'])                       
+                                        ['.', 'B'])                       
                     target = self.get_col(col)
                     for n in range(9):
                         if target[n: n+2] in possible_sublists:
@@ -233,7 +237,7 @@ class Board:
             starting_points = []
             if self.row_info[row][0] >= 1:
                 if self.row_info[row][1] + self.row_info[row][2] >= 1:
-                    possible_sublists =(['.'], ['C'])                       
+                    possible_sublists =(['.'])                       
                     target = self.get_row(row)
                     for n in range(10):
                         if target[n] in possible_sublists:
@@ -312,6 +316,8 @@ class Board:
 
         numb_of_hints = int(sys.stdin.readline())
 
+        boats = {"boat1": 4, "boat2": 3, "boat3": 2, "boat4": 1}
+
         row_info = []
         col_info = []
 
@@ -322,14 +328,21 @@ class Board:
             row_info.append([row_restritions[e], 10, 0])
             col_info.append([column_restritions[e], 10, 0])
 
+        check_boats_start = []
 
         for e in range(numb_of_hints):
             hint = sys.stdin.readline().split()
 
             row = int(hint[1])
             col = int(hint[2])
+
+            if hint[3] == 'T' or hint[3] == 'L':
+                check_boats_start.append((row, col))
             
             grid[row][col] = hint[3]
+
+            if hint[3] == 'C':
+                boats['boat1'] -= 1
 
             row_info[row][1] -= 1
             col_info[col][1] -= 1
@@ -347,11 +360,31 @@ class Board:
                         row_info[coord[0]][1] -= 1
                         col_info[coord[1]][1] -= 1
                     
-        boats = {"boat1": 4, "boat2": 3, "boat3": 2, "boat4": 1}
+        
 
         for row in range(board_size):
             for col in range(board_size):
-                if grid[row][col] == '.':
+                if grid[row][col] == 'T':
+                    if row+1 and grid[row+1][col] == 'B':
+                        boats['boat2'] -= 1
+                    elif grid[row+1][col] == 'M':
+                        if row+2 <= 9:
+                            if grid[row+2][col] == 'B':
+                                boats['boat3'] -= 1
+                            elif grid[row+2][col] == 'M':
+                                if row+3 <= 9 and grid[row+3][col] == 'B':
+                                    boats['boat4'] -= 1  
+                elif grid[row][col] == 'L':
+                    if grid[row][col+1] == 'R':
+                        boats['boat2'] -= 1
+                    elif grid[row][col+1] == 'M':
+                        if col+2 <= 9:
+                            if grid[row][col+2] == 'R':
+                                boats['boat3'] -= 1
+                            elif grid[row][col+2] == 'M':
+                                if col+3 <= 9 and grid[row][col]+3 == 'R':
+                                    boats['boat4'] -= 1
+                elif grid[row][col] == '.':
                     if row_info[row][0] == row_info[row][2] or col_info[col][0] == col_info[col][2]:
                         grid[row][col] = 'W'
                         row_info[row][1] -= 1
@@ -424,6 +457,8 @@ class Bimaru(Problem):
         # TODO
         
         actions = [] #(boat_lenght, row, col, 0 or 1 ->(vertical or horizontal))
+        if state == None:
+            return actions
         board = state.board
         available_boats = board.boats
 
@@ -460,6 +495,7 @@ class Bimaru(Problem):
                 for row in col_starting_coord:
                     actions.append((1, row, n, 0))
 
+        print('returned actions =', actions)
         return actions
                 
 
@@ -469,152 +505,205 @@ class Bimaru(Problem):
         das presentes na lista obtida pela execução de
         self.actions(state)."""
         # TODO
-        if action in self.actions(state):
-            board = state.board
-            boat_lenght = action[0]
-            row = action[1]
-            col = action[2]
-            direction = action[3]
+        print("started result")
+        board = copy.deepcopy(state.board)
+        boat_lenght = action[0]
+        row = action[1]
+        col = action[2]
+        direction = action[3]
 
-            print("boat_lenght=", boat_lenght)
-            print("direction=", direction)
-            print("row, col = ", row, col)
+        
+        if boat_lenght == 4:
+            board.boats['boat4'] -= 1
+        elif boat_lenght == 3:
+            board.boats['boat3'] -= 1
+        elif boat_lenght == 2:
+            board.boats['boat2'] -= 1
+        elif boat_lenght == 1:
+            board.boats['boat1'] -= 1
 
-            if boat_lenght == 1:
-                if board.grid[row][col] == '.':
-                    board.grid[row][col] = 'C'
+        print("boat 4", board.boats['boat4'] )
+        print("boat 3", board.boats['boat3'] )
+        print("boat 2", board.boats['boat2'] )
+        print("boat 1", board.boats['boat1'] )
 
-                    board.row_info[row][1] -= 1
-                    board.col_info[col][1] -= 1
-                    
-                    board.row_info[row][2] += 1
-                    board.col_info[col][2] += 1
 
-                    coord_to_water = around_coord(row, col + n, 'C')
+        print("boat_lenght=", boat_lenght)
+        print("direction=", direction)
+        print("row, col = ", row, col)
 
-                    for coord in coord_to_water:
-                        if valid_coord(coord[0], coord[1]):
-                            if board.grid[coord[0]][coord[1]] == '.':
-                                board.grid[coord[0]][coord[1]] = 'W'
-                                board.row_info[coord[0]][1] -= 1
-                                board.col_info[coord[1]][1] -= 1
+        if boat_lenght == 1:
+            if board.grid[row][col] == '.':
+                board.grid[row][col] = 'C'
+
+                board.row_info[row][1] -= 1
+                board.col_info[col][1] -= 1
+                
+                board.row_info[row][2] += 1
+                board.col_info[col][2] += 1
+
+                coord_to_water = around_coord(row, col, 'C')
+
+                for coord in coord_to_water:
+                    if valid_coord(coord[0], coord[1]):
+                        if board.grid[coord[0]][coord[1]] == '.':
+                            board.grid[coord[0]][coord[1]] = 'W'
+                            board.row_info[coord[0]][1] -= 1
+                            board.col_info[coord[1]][1] -= 1
+                        elif board.grid[coord[0]][coord[1]] != 'W':
+                            print("result returned null")
+                            return None
+        else:
+            if direction:
+                for n in range(boat_lenght):
+                    if n == 0:
+                        if board.grid[row][col+n] == '.':
+                            board.grid[row][col+n] = 'L'
+                            
+                            board.row_info[row][1] -= 1
+                            board.col_info[col+n][1] -= 1
+                            
+                            board.row_info[row][2] += 1
+                            board.col_info[col+n][2] += 1
+
+                            coord_to_water = around_coord(row, col + n, 'L')
+
+                            for coord in coord_to_water:
+                                if valid_coord(coord[0], coord[1]):
+                                    if board.grid[coord[0]][coord[1]] == '.':
+                                        board.grid[coord[0]][coord[1]] = 'W'
+                                        board.row_info[coord[0]][1] -= 1
+                                        board.col_info[coord[1]][1] -= 1
+                                    elif board.grid[coord[0]][coord[1]] != 'W':
+                                        print("result returned null")
+                                        return None
+                            
+                    elif n == boat_lenght - 1:
+                        if board.grid[row][col+n] == '.':
+                            board.grid[row][col+n] = 'R' 
+
+                            board.row_info[row][1] -= 1
+                            board.col_info[col+n][1] -= 1
+                            
+                            board.row_info[row][2] += 1
+                            board.col_info[col+n][2] += 1
+
+                            coord_to_water = around_coord(row, col + n, 'R')
+
+                            for coord in coord_to_water:
+                                if valid_coord(coord[0], coord[1]):
+                                    if board.grid[coord[0]][coord[1]] == '.':
+                                        board.grid[coord[0]][coord[1]] = 'W'
+                                        board.row_info[coord[0]][1] -= 1
+                                        board.col_info[coord[1]][1] -= 1
+                                    elif board.grid[coord[0]][coord[1]] != 'W':
+                                        print("result returned null")
+                                        return None
+                    else:
+                        if board.grid[row][col+n] == '.':
+                            board.grid[row][col+n] = 'M'
+
+                            board.row_info[row][1] -= 1
+                            board.col_info[col+n][1] -= 1
+                            
+                            board.row_info[row][2] += 1
+                            board.col_info[col+n][2] += 1
+
+                            coord_to_water = around_coord(row, col + n, 'M')
+
+                            for coord in coord_to_water:
+                                if valid_coord(coord[0], coord[1]):
+                                    if board.grid[coord[0]][coord[1]] == '.':
+                                        board.grid[coord[0]][coord[1]] = 'W'
+                                        board.row_info[coord[0]][1] -= 1
+                                        board.col_info[coord[1]][1] -= 1
+                                    elif board.grid[coord[0]][coord[1]] != 'W':
+                                        print("result returned null")
+                                        return None
             else:
-                if direction:
-                    for n in range(boat_lenght):
-                        if n == 0:
-                            if board.grid[row][col+n] != '.':
-                                board.grid[row][col+n] = 'L'
-                                
-                                board.row_info[row][1] -= 1
-                                board.col_info[col][1] -= 1
-                                
-                                board.row_info[row][2] += 1
-                                board.col_info[col][2] += 1
-
-                                coord_to_water = around_coord(row, col + n, 'L')
-
-                                for coord in coord_to_water:
-                                    if valid_coord(coord[0], coord[1]):
-                                        if board.grid[coord[0]][coord[1]] == '.':
-                                            board.grid[coord[0]][coord[1]] = 'W'
-                                            board.row_info[coord[0]][1] -= 1
-                                            board.col_info[coord[1]][1] -= 1
-                                
-                        elif n == boat_lenght - 1:
-                            if board.grid[row][col+n] != '.':
-                                board.grid[row][col+n] = 'R' 
-
-                                board.row_info[row][1] -= 1
-                                board.col_info[col][1] -= 1
-                                
-                                board.row_info[row][2] += 1
-                                board.col_info[col][2] += 1
-
-                                coord_to_water = around_coord(row, col + n, 'R')
-
-                                for coord in coord_to_water:
-                                    if valid_coord(coord[0], coord[1]):
-                                        if board.grid[coord[0]][coord[1]] == '.':
-                                            board.grid[coord[0]][coord[1]] = 'W'
-                                            board.row_info[coord[0]][1] -= 1
-                                            board.col_info[coord[1]][1] -= 1
-                        else:
-                            if board.grid[row][col+n] != '.':
-                                board.grid[row][col+n] = 'M'
-
-                                board.row_info[row][1] -= 1
-                                board.col_info[col][1] -= 1
-                                
-                                board.row_info[row][2] += 1
-                                board.col_info[col][2] += 1
-
-                                coord_to_water = around_coord(row, col + n, 'M')
-
-                                for coord in coord_to_water:
-                                    if valid_coord(coord[0], coord[1]):
-                                        if board.grid[coord[0]][coord[1]] == '.':
-                                            board.grid[coord[0]][coord[1]] = 'W'
-                                            board.row_info[coord[0]][1] -= 1
-                                            board.col_info[coord[1]][1] -= 1
-                else:
-                    for n in range(boat_lenght):
+                for n in range(boat_lenght):
+                    if n == 0:
                         print("n =", n)
-                        if n == 0:
-                            if board.grid[row+n][col] != '.':
-                                board.grid[row+n][col] = 'T'
+                        if board.grid[row+n][col] == '.':
+                            board.grid[row+n][col] = 'T'
+                            print("printed T")
 
-                                board.row_info[row][1] -= 1
-                                board.col_info[col][1] -= 1
-                                
-                                board.row_info[row][2] += 1
-                                board.col_info[col][2] += 1
+                            board.row_info[row+n][1] -= 1
+                            board.col_info[col][1] -= 1
+                            
+                            board.row_info[row+n][2] += 1
+                            board.col_info[col][2] += 1
 
-                                coord_to_water = around_coord(row, col + n, 'T')
+                            coord_to_water = around_coord(row+n, col, 'T')
 
-                                for coord in coord_to_water:
-                                    if valid_coord(coord[0], coord[1]):
-                                        if board.grid[coord[0]][coord[1]] == '.':
-                                            board.grid[coord[0]][coord[1]] = 'W'
-                                            board.row_info[coord[0]][1] -= 1
-                                            board.col_info[coord[1]][1] -= 1
+                            for coord in coord_to_water:
+                                if valid_coord(coord[0], coord[1]):
+                                    if board.grid[coord[0]][coord[1]] == '.':
+                                        board.grid[coord[0]][coord[1]] = 'W'
+                                        board.row_info[coord[0]][1] -= 1
+                                        board.col_info[coord[1]][1] -= 1
+                                    elif board.grid[coord[0]][coord[1]] != 'W':
+                                        print("result returned null T")
+                                        return None
 
-                        elif n == boat_lenght - 1:
-                            if board.grid[row+n][col]:
-                                board.grid[row+n][col] = 'B' 
+                    elif n == boat_lenght - 1:
+                        print("n =", n)
+                        if board.grid[row+n][col] == '.':
+                            board.grid[row+n][col] = 'B' 
+                            print("printed B")
+                            board.row_info[row+n][1] -= 1
+                            board.col_info[col][1] -= 1
+                            
+                            board.row_info[row+n][2] += 1
+                            board.col_info[col][2] += 1
 
-                                board.row_info[row][1] -= 1
-                                board.col_info[col][1] -= 1
-                                
-                                board.row_info[row][2] += 1
-                                board.col_info[col][2] += 1
+                            coord_to_water = around_coord(row+n, col, 'B')
 
-                                coord_to_water = around_coord(row, col + n, 'B')
+                            for coord in coord_to_water:
+                                if valid_coord(coord[0], coord[1]):
+                                    print(board.grid[coord[0]][coord[1]])
+                                    if board.grid[coord[0]][coord[1]] == '.':
+                                        board.grid[coord[0]][coord[1]] = 'W'
+                                        board.row_info[coord[0]][1] -= 1
+                                        board.col_info[coord[1]][1] -= 1
+                                    elif board.grid[coord[0]][coord[1]] != 'W':
+                                        print("result returned null B")
+                                        return None
+                    else:
+                        print("n =", n)
+                        if board.grid[row+n][col] == '.':
+                            print("got here")
+                            board.grid[row+n][col] = 'M'
+                            print("printed M")
+                            board.row_info[row+n][1] -= 1
+                            board.col_info[col][1] -= 1
+                            
+                            board.row_info[row+n][2] += 1
+                            board.col_info[col][2] += 1
 
-                                for coord in coord_to_water:
-                                    if valid_coord(coord[0], coord[1]):
-                                        if board.grid[coord[0]][coord[1]] == '.':
-                                            board.grid[coord[0]][coord[1]] = 'W'
-                                            board.row_info[coord[0]][1] -= 1
-                                            board.col_info[coord[1]][1] -= 1
-                        else:
-                            if board.grid[row+n][col] != '.':
-                                board.grid[row+n][col] = 'M'
+                            coord_to_water = around_coord(row+n, col, 'M')
 
-                                board.row_info[row][1] -= 1
-                                board.col_info[col][1] -= 1
-                                
-                                board.row_info[row][2] += 1
-                                board.col_info[col][2] += 1
-
-                                coord_to_water = around_coord(row, col + n, 'M')
-
-                                for coord in coord_to_water:
-                                    if valid_coord(coord[0], coord[1]):
-                                        if board.grid[coord[0]][coord[1]] == '.':
-                                            board.grid[coord[0]][coord[1]] = 'W'
-                                            board.row_info[coord[0]][1] -= 1
-                                            board.col_info[coord[1]][1] -= 1
-            return BimaruState(board)    
+                            for coord in coord_to_water:
+                                if valid_coord(coord[0], coord[1]):
+                                    print(board.grid[coord[0]][coord[1]])
+                                    if board.grid[coord[0]][coord[1]] == '.':
+                                        board.grid[coord[0]][coord[1]] = 'W'
+                                        board.row_info[coord[0]][1] -= 1
+                                        board.col_info[coord[1]][1] -= 1
+                                    elif board.grid[coord[0]][coord[1]] != 'W':
+                                        print("result returned null M")
+                                        return None
+        print("Board before water_lines")
+        board.print()
+        print("row_info", board.row_info)
+        print("col_info", board.col_info)
+        board.water_lines()
+        print("Board after water_lines")
+        board.print()
+        print("row_info", board.row_info)
+        print("col_info", board.col_info)
+        print("result finished")
+        return BimaruState(board)    
 
 
                         
@@ -699,6 +788,7 @@ if __name__ == "__main__":
     # Retirar a solução a partir do nó resultante,
     # Imprimir para o standard output no formato indicado.
     board = Board.parse_instance()
+    board.print()
     problem = Bimaru(board)
     goal_node = depth_first_tree_search(problem)
     goal_node.state.board.print()
