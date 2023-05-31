@@ -82,8 +82,8 @@ class Board:
     """Representação interna de um tabuleiro de Bimaru."""
     
     def __init__(self, row_info: list, col_info: list, grid, boats):
-        self.row_info = row_info # row_info = [[row_restrition, empty_in_row, pieces_in_row], ...]
-        self.col_info = col_info # col_info = [[col_restrition, empty_in_col, pieces_in_col], ...]
+        self.row_info = row_info # row_info = [[row_restriction, empty_in_row, pieces_in_row], ...]
+        self.col_info = col_info # col_info = [[col_restriction, empty_in_col, pieces_in_col], ...]
         self.grid = grid
         self.boats = boats
 
@@ -119,6 +119,178 @@ class Board:
                         self.grid[row][col] = 'W'
                         self.row_info[row][1] -= 1
                         self.col_info[col][1] -= 1
+    
+
+    def boat4_row(self, row):
+        """Para uma determinada linha retorna os indices 
+        de onde um barco 4 pode começar"""
+        if row <= 9 and row >= 0:
+            if self.row_info[row][0] >= 4:
+                if self.row_info[row][1] + self.row_info[row][2] >= 4:
+                    starting_points = []
+                    possible_sublists =(['.', '.', '.', '.'], ['L', '.', '.', '.'], ['L', '.', '.', '.'],
+                                        ['L', '.', '.', '.'], ['.', 'M', '.', '.'], ['L', 'M', '.', '.'],  
+                                        ['.', 'M', 'M', '.'], ['L', 'M', 'M', '.'], ['.', 'M', 'M', 'R'],  
+                                        ['L', 'M', 'M', 'R'], ['.', 'M', '.', 'R'], ['L', 'M', '.', 'R'], 
+                                            ['.', '.', 'M', 'R'], ['L', '.', 'M', 'R'], ['.', '.', '.', 'R'],  
+                                        ['L', '.', '.', 'R'], ['.', '.', 'M', '.'], ['L', '.', 'M', '.'])
+                    target = self.get_row(row)
+                    for n in range(5):
+                        if target[n: n+4] in possible_sublists:
+                            starting_points.append(n)
+                    return starting_points
+
+    def boat4_col(self, col):
+        """Para uma determinada coluna retorna os indices 
+        de onde um barco 4 pode começar"""
+        if col <= 9 and col >= 0:
+            if self.col_info[col][0] >= 4:
+                if self.col_info[col][1] + self.col_info[col][2] >= 4:
+                    starting_points = []
+                    possible_sublists =(['.', '.', '.', '.'], ['T', '.', '.', '.'], ['T', '.', '.', '.'],
+                                        ['T', '.', '.', '.'], ['.', 'M', '.', '.'], ['T', 'M', '.', '.'],  
+                                        ['.', 'M', 'M', '.'], ['T', 'M', 'M', '.'], ['.', 'M', 'M', 'B'],  
+                                        ['T', 'M', 'M', 'B'], ['.', 'M', '.', 'B'], ['T', 'M', '.', 'B'], 
+                                        ['.', '.', 'M', 'B'], ['T', '.', 'M', 'B'], ['.', '.', '.', 'B'],  
+                                        ['T', '.', '.', 'B'], ['.', '.', 'M', '.'], ['T', '.', 'M', '.'])
+                    target = self.get_col(col)
+                    for n in range(5):
+                        if target[n: n+4] in possible_sublists:
+                            starting_points.append(n)
+                    return starting_points             
+
+
+    def boat3_row(self, row):
+        """Para uma determinada linha retorna os indices 
+        de onde um barco 3 pode começar"""
+        if row <= 9 and row >= 0:
+            if self.row_info[row][0] >= 3:
+                if self.row_info[row][1] + self.row_info[row][2] >= 3:
+                    starting_points = []
+                    possible_sublists =(['.', 'M', '.'], ['L', 'M', '.'],   
+                                        ['.', 'M', 'R'], ['L', 'M', 'R'],
+                                        ['.', '.', '.'], ['L', '.', '.'],  
+                                        ['.', '.', 'R'], ['L', '.', 'R'])                       
+                    target = self.get_row(row)
+                    for n in range(8):
+                        if target[n: n+3] in possible_sublists:
+                            starting_points.append(n)
+                    return starting_points
+
+    def boat3_col(self, col):
+        """Para uma determinada coluna retorna os indices 
+        de onde um barco 3 pode começar"""
+        if col <= 9 and col >= 0:
+            if self.col_info[col][0] >= 3:
+                if self.col_info[col][1] + self.col_info[col][2] >= 3:
+                    starting_points = []
+                    possible_sublists =(['.', 'M', '.'], ['T', 'M', '.'],   
+                                        ['.', 'M', 'B'], ['T', 'M', 'B'],
+                                        ['.', '.', '.'], ['T', '.', '.'],  
+                                        ['.', '.', 'B'], ['T', '.', 'B'])                       
+                    target = self.get_col(col)
+                    for n in range(8):
+                        if target[n: n+3] in possible_sublists:
+                            starting_points.append(n)
+                    return starting_points
+
+
+    def boat2_row(self, row):
+        """Para uma determinada linha retorna os indices 
+        de onde um barco 2 pode começar"""
+        if row <= 9 and row >= 0:
+            if self.row_info[row][0] >= 2:
+                if self.row_info[row][1] + self.row_info[row][2] >= 2:
+                    starting_points = []
+                    possible_sublists =(['.', '.'], ['L', '.'],   
+                                        ['.', 'R'], ['L', 'R'])                       
+                    target = self.get_row(row)
+                    for n in range(9):
+                        if target[n: n+2] in possible_sublists:
+                            starting_points.append(n)
+                    return starting_points
+
+    def boat2_col(self, col):
+        """Para uma determinada linha retorna os indices 
+        de onde um barco 2 pode começar"""
+        if col <= 9 and col >= 0:
+            if self.col_info[col][0] >= 2:
+                if self.col_info[col][1] + self.col_info[col][2] >= 2:
+                    starting_points = []
+                    possible_sublists =(['.', '.'], ['T', '.'],   
+                                        ['.', 'B'], ['T', 'B'])                       
+                    target = self.get_col(col)
+                    for n in range(9):
+                        if target[n: n+2] in possible_sublists:
+                            starting_points.append(n)
+                    return starting_points
+    
+
+    def boat1_row(self, row):
+        """Para uma determinada linha retorna os indices 
+        de onde um barco 2 pode começar"""
+        if row <= 9 and row >= 0:
+            if self.row_info[row][0] >= 1:
+                if self.row_info[row][1] + self.row_info[row][2] >= 1:
+                    starting_points = []
+                    possible_sublists =(['.'], ['C'])                       
+                    target = self.get_row(row)
+                    for n in range(10):
+                        if target[n] in possible_sublists:
+                            starting_points.append(n)
+                    return starting_points
+
+    def boat1_col(self, col):
+        """Para uma determinada linha retorna os indices 
+        de onde um barco 2 pode começar"""
+        if col <= 9 and col >= 0:
+            if self.col_info[col][0] >= 1:
+                if self.col_info[col][1] + self.col_info[col][2] >= 1:
+                    starting_points = []
+                    possible_sublists =(['.'], ['C'])                       
+                    target = self.get_col(col)
+                    for n in range(10):
+                        if target[n] in possible_sublists:
+                            starting_points.append(n)
+                    return starting_points
+    
+
+    def get_row(self, row):
+        if row <= 9 and row >= 0:
+            return self.grid[row]
+
+    
+    def get_col(self, col):
+        if col <= 9 and col >= 0:
+            column = []
+            for n in range(board_size):
+                column.append(self.grid[n][col])
+            return column
+
+
+    def row_retrictions(self, row):
+        if row <= 9 and row >= 0:
+            return self.row_info[0]
+    
+    def col_restrictions(self, col):
+        if col <= 9 and col >= 0:
+            return self.col_info[0]
+        
+    def row_numb_pieces(self, row):
+        if row <= 9 and row >= 0:
+            return self.row_info[2]
+    
+    def col_numb_pieces(self, col):
+        if col <= 9 and col >= 0:
+            return self.col_info[2]
+        
+    def row_numb_empty(self, row):
+        if row <= 9 and row >= 0:
+            return self.row_info[1]
+    
+    def col_numb_empty(self, col):
+        if col <= 9 and col >= 0:
+            return self.col_info[1]
 
 
     @staticmethod
@@ -244,26 +416,52 @@ class Board:
 class Bimaru(Problem):
     def __init__(self, board: Board):
         """O construtor especifica o estado inicial."""
-        self.board = board
+        self.initial = BimaruState(board)
 
     def actions(self, state: BimaruState):
         """Retorna uma lista de ações que podem ser executadas a
         partir do estado passado como argumento."""
         # TODO
         
-        if state.state_id == 1: #if is the first state return 1
-            return 1
-        
-        actions = [] #(boatkind, row, col, start_piece)
+        actions = [] #(boat_lenght, row, col, 0 or 1 ->(vertical or horizontal))
         board = state.board
         available_boats = board.boats
 
         if available_boats['boat4'] != 0:
-            for row in range(board_size):
-                for col in range(board_size):
-                    if board.row_restritions[row] >= 4:
-                        pass
+            for n in range(board_size):
+                row_starting_coord = board.boat4_row(n)
+                col_starting_coord = board.boat4_col(n)
+                for col in row_starting_coord:
+                    actions.append((4, n, col, 1))
+                for row in col_starting_coord:
+                    actions.append((4, n, row, 0))
+        elif available_boats['boat3'] != 0:
+            for n in range(board_size):
+                row_starting_coord = board.boat3_row(n)
+                col_starting_coord = board.boat3_col(n)
+                for col in row_starting_coord:
+                    actions.append((3, n, col, 1))
+                for row in col_starting_coord:
+                    actions.append((3, row, n, 0))
+        elif available_boats['boat2'] != 0:
+            for n in range(board_size):
+                row_starting_coord = board.boat2_row(n)
+                col_starting_coord = board.boat2_col(n)
+                for col in row_starting_coord:
+                    actions.append((2, n, col, 1))
+                for row in col_starting_coord:
+                    actions.append((2, row, n, 0))
+        elif available_boats['boat1'] != 0:
+            for n in range(board_size):
+                row_starting_coord = board.boat1_row(n)
+                col_starting_coord = board.boat1_col(n)
+                for col in row_starting_coord:
+                    actions.append((1, n, col, 1))
+                for row in col_starting_coord:
+                    actions.append((1, row, n, 0))
 
+        return actions
+                
 
     def result(self, state: BimaruState, action):
         """Retorna o estado resultante de executar a 'action' sobre
@@ -271,7 +469,141 @@ class Bimaru(Problem):
         das presentes na lista obtida pela execução de
         self.actions(state)."""
         # TODO
-        board = state.board
+        if action in self.actions(state):
+            board = state.board
+            boat_lenght = action[0]
+            row = action[1]
+            col = action[2]
+            direction = action[3]
+
+            if boat_lenght == 1:
+                board.grid[row][col] = 'C'
+
+                board.row_info[row][1] -= 1
+                board.col_info[col][1] -= 1
+                
+                board.row_info[row][2] += 1
+                board.col_info[col][2] += 1
+
+                coord_to_water = around_coord(row, col + n, 'C')
+
+                for coord in coord_to_water:
+                    if valid_coord(coord[0], coord[1]):
+                        if board.grid[coord[0]][coord[1]] == '.':
+                            board.grid[coord[0]][coord[1]] = 'W'
+                            board.row_info[coord[0]][1] -= 1
+                            board.col_info[coord[1]][1] -= 1
+            else:
+                if direction:
+                    for n in range(boat_lenght):
+                        if n == 0:
+                            board.grid[row][col+n] = 'L'
+                            
+                            board.row_info[row][1] -= 1
+                            board.col_info[col][1] -= 1
+                            
+                            board.row_info[row][2] += 1
+                            board.col_info[col][2] += 1
+
+                            coord_to_water = around_coord(row, col + n, 'L')
+
+                            for coord in coord_to_water:
+                                if valid_coord(coord[0], coord[1]):
+                                    if board.grid[coord[0]][coord[1]] == '.':
+                                        board.grid[coord[0]][coord[1]] = 'W'
+                                        board.row_info[coord[0]][1] -= 1
+                                        board.col_info[coord[1]][1] -= 1
+                                
+                        elif n == boat_lenght - 1:
+                            board.grid[row][col+n] = 'R' 
+
+                            board.row_info[row][1] -= 1
+                            board.col_info[col][1] -= 1
+                            
+                            board.row_info[row][2] += 1
+                            board.col_info[col][2] += 1
+
+                            coord_to_water = around_coord(row, col + n, 'R')
+
+                            for coord in coord_to_water:
+                                if valid_coord(coord[0], coord[1]):
+                                    if board.grid[coord[0]][coord[1]] == '.':
+                                        board.grid[coord[0]][coord[1]] = 'W'
+                                        board.row_info[coord[0]][1] -= 1
+                                        board.col_info[coord[1]][1] -= 1
+                        else:
+                            board.grid[row][col+n] = 'M'
+
+                            board.row_info[row][1] -= 1
+                            board.col_info[col][1] -= 1
+                            
+                            board.row_info[row][2] += 1
+                            board.col_info[col][2] += 1
+
+                            coord_to_water = around_coord(row, col + n, 'M')
+
+                            for coord in coord_to_water:
+                                if valid_coord(coord[0], coord[1]):
+                                    if board.grid[coord[0]][coord[1]] == '.':
+                                        board.grid[coord[0]][coord[1]] = 'W'
+                                        board.row_info[coord[0]][1] -= 1
+                                        board.col_info[coord[1]][1] -= 1
+                else:
+                    for n in range(boat_lenght):
+                        if n == 0:
+                            board.grid[row+n][col] = 'T'
+
+                            board.row_info[row][1] -= 1
+                            board.col_info[col][1] -= 1
+                            
+                            board.row_info[row][2] += 1
+                            board.col_info[col][2] += 1
+
+                            coord_to_water = around_coord(row, col + n, 'T')
+
+                            for coord in coord_to_water:
+                                if valid_coord(coord[0], coord[1]):
+                                    if board.grid[coord[0]][coord[1]] == '.':
+                                        board.grid[coord[0]][coord[1]] = 'W'
+                                        board.row_info[coord[0]][1] -= 1
+                                        board.col_info[coord[1]][1] -= 1
+
+                        elif n == boat_lenght - 1:
+                            board.grid[row+n][col] = 'B' 
+
+                            board.row_info[row][1] -= 1
+                            board.col_info[col][1] -= 1
+                            
+                            board.row_info[row][2] += 1
+                            board.col_info[col][2] += 1
+
+                            coord_to_water = around_coord(row, col + n, 'B')
+
+                            for coord in coord_to_water:
+                                if valid_coord(coord[0], coord[1]):
+                                    if board.grid[coord[0]][coord[1]] == '.':
+                                        board.grid[coord[0]][coord[1]] = 'W'
+                                        board.row_info[coord[0]][1] -= 1
+                                        board.col_info[coord[1]][1] -= 1
+                        else:
+                            board.grid[row+n][col] = 'M'
+
+                            board.row_info[row][1] -= 1
+                            board.col_info[col][1] -= 1
+                            
+                            board.row_info[row][2] += 1
+                            board.col_info[col][2] += 1
+
+                            coord_to_water = around_coord(row, col + n, 'M')
+
+                            for coord in coord_to_water:
+                                if valid_coord(coord[0], coord[1]):
+                                    if board.grid[coord[0]][coord[1]] == '.':
+                                        board.grid[coord[0]][coord[1]] = 'W'
+                                        board.row_info[coord[0]][1] -= 1
+                                        board.col_info[coord[1]][1] -= 1
+            return state(board)    
+
 
                         
 
@@ -282,13 +614,19 @@ class Bimaru(Problem):
         estão preenchidas de acordo com as regras do problema."""
         board = state.board
         
+        for row in board.grid:
+            if '.' in row:
+                return False
+        return True
+    
+        """
         col_boat_parts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         count_boats = [0, 0, 0, 0] #[boat1, boat2, boat3, boat4]
         for row in range(board_size):
             count_row_boat_parts = 0
-            for col in range(col_boat_parts):
+            for col in range(board_size):
                 piece = board.grid[row][col]
-                initial_piece = self.is_in_initial_grid(row, col)
+                initial_piece = self.initial_grid_piece(row, col)
 
                 if piece not in board_pieces:    #1
                     return False
@@ -327,8 +665,7 @@ class Bimaru(Problem):
             return False
         if count_boats != [4, 3, 2, 1]: #7
             return False
-
-        
+        """        
 
     def h(self, node: Node):
         """Função heuristica utilizada para a procura A*."""
@@ -337,7 +674,7 @@ class Bimaru(Problem):
 
     # TODO: outros metodos da classe
     def initial_grid_piece(self, row, col):
-        return self.board.get_value(row, col)
+        return self.initial.board.get_value(row, col)
 
 
 if __name__ == "__main__":
@@ -347,4 +684,6 @@ if __name__ == "__main__":
     # Retirar a solução a partir do nó resultante,
     # Imprimir para o standard output no formato indicado.
     board = Board.parse_instance()
-    board.print()
+    problem = Bimaru(board)
+    goal_node = depth_first_tree_search(problem)
+    goal_node.state.board.print()
