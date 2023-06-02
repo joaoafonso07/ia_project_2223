@@ -128,21 +128,20 @@ class Board:
         de onde um barco 4 pode começar"""
         if row <= 9 and row >= 0:
             starting_points = []
-            if self.row_info[row][0] >= 4: #row restriction >= 4
-                if self.row_info[row][0] - self.row_info[row][3] >=4 :
-                    if self.row_info[row][1] + self.row_info[row][2] >= 4:                    
-                        possible_sublists =(['.', '.', '.', '.'], ['L', '.', '.', '.'],
-                                            ['.', 'M', '.', '.'], ['L', 'M', '.', '.'],  
-                                            ['.', 'M', 'M', '.'], ['L', 'M', 'M', '.'], 
-                                            ['.', 'M', 'M', 'R'], ['L', '.', '.', 'R'],  
-                                            ['.', 'M', '.', 'R'], ['L', 'M', '.', 'R'], 
-                                            ['.', '.', 'M', 'R'], ['L', '.', 'M', 'R'],  
-                                            ['.', '.', '.', 'R'], ['L', '.', 'M', '.'], 
-                                            ['.', '.', 'M', '.'])
-                        target = self.get_row(row)
-                        for n in range(7):
-                            if target[n: n+4] in possible_sublists:
-                                starting_points.append(n)
+            if self.row_info[row][0] - self.row_info[row][3] >=4 :
+                if self.row_info[row][1] + self.row_info[row][2] >= 4:                    
+                    possible_sublists =(['.', '.', '.', '.'], ['L', '.', '.', '.'],
+                                        ['.', 'M', '.', '.'], ['L', 'M', '.', '.'],  
+                                        ['.', 'M', 'M', '.'], ['L', 'M', 'M', '.'], 
+                                        ['.', 'M', 'M', 'R'], ['L', '.', '.', 'R'],  
+                                        ['.', 'M', '.', 'R'], ['L', 'M', '.', 'R'], 
+                                        ['.', '.', 'M', 'R'], ['L', '.', 'M', 'R'],  
+                                        ['.', '.', '.', 'R'], ['L', '.', 'M', '.'], 
+                                        ['.', '.', 'M', '.'])
+                    target = self.get_row(row)
+                    for n in range(7):
+                        if target[n: n+4] in possible_sublists:
+                            starting_points.append(n)
             return starting_points
 
     def boat4_col(self, col):
@@ -150,20 +149,19 @@ class Board:
         de onde um barco 4 pode começar"""
         if col <= 9 and col >= 0:
             starting_points = []
-            if self.col_info[col][0] >= 4:
-                if self.col_info[col][0] - self.col_info[col][3] >= 4:
-                    if self.col_info[col][1] + self.col_info[col][2] >= 4:                    
-                        possible_sublists =(['.', '.', '.', '.'], ['T', '.', '.', '.'], 
-                                            ['.', 'M', '.', '.'], ['T', 'M', '.', '.'],
-                                            ['.', 'M', 'M', '.'], ['T', 'M', 'M', '.'],   
-                                            ['.', '.', 'M', '.'], ['T', '.', 'M', '.'], 
-                                            ['.', 'M', '.', 'B'], ['T', 'M', '.', 'B'],
-                                            ['.', '.', 'M', 'B'], ['T', '.', 'M', 'B'],
-                                            ['.', 'M', 'M', 'B'])
-                        target = self.get_col(col)
-                        for n in range(7):
-                            if target[n: n+4] in possible_sublists:
-                                starting_points.append(n)
+            if self.col_info[col][0] - self.col_info[col][3] >= 4:
+                if self.col_info[col][1] + self.col_info[col][2] >= 4:                    
+                    possible_sublists =(['.', '.', '.', '.'], ['T', '.', '.', '.'], 
+                                        ['.', 'M', '.', '.'], ['T', 'M', '.', '.'],
+                                        ['.', 'M', 'M', '.'], ['T', 'M', 'M', '.'],   
+                                        ['.', '.', 'M', '.'], ['T', '.', 'M', '.'], 
+                                        ['.', 'M', '.', 'B'], ['T', 'M', '.', 'B'],
+                                        ['.', '.', 'M', 'B'], ['T', '.', 'M', 'B'],
+                                        ['.', 'M', 'M', 'B'])
+                    target = self.get_col(col)
+                    for n in range(7):
+                        if target[n: n+4] in possible_sublists:
+                            starting_points.append(n)
             return starting_points             
 
 
@@ -172,17 +170,16 @@ class Board:
         de onde um barco 3 pode começar"""
         if row <= 9 and row >= 0:
             starting_points = []
-            if self.row_info[row][0] >= 3:
-                if self.row_info[row][0] - self.row_info[row][3] >= 3:
-                    if self.row_info[row][1] + self.row_info[row][2] >= 3:
-                        possible_sublists =(['.', 'M', '.'], ['L', 'M', '.'],   
-                                            ['.', '.', '.'], ['L', '.', '.'],  
-                                            ['.', '.', 'R'], ['L', '.', 'R'],
-                                            ['.', 'M', 'R'])                       
-                        target = self.get_row(row)
-                        for n in range(8):
-                            if target[n: n+3] in possible_sublists:
-                                starting_points.append(n)
+            if self.row_info[row][0] - self.row_info[row][3] >= 3:
+                if self.row_info[row][1] + self.row_info[row][2] >= 3:
+                    possible_sublists =(['.', 'M', '.'], ['L', 'M', '.'],   
+                                        ['.', '.', '.'], ['L', '.', '.'],  
+                                        ['.', '.', 'R'], ['L', '.', 'R'],
+                                        ['.', 'M', 'R'])                       
+                    target = self.get_row(row)
+                    for n in range(8):
+                        if target[n: n+3] in possible_sublists:
+                            starting_points.append(n)
             return starting_points
 
     def boat3_col(self, col):
@@ -190,17 +187,16 @@ class Board:
         de onde um barco 3 pode começar"""
         if col <= 9 and col >= 0:
             starting_points = []
-            if self.col_info[col][0] >= 3:
-                if self.col_info[col][0] - self.col_info[col][3] >= 3:
-                    if self.col_info[col][1] + self.col_info[col][2] >= 3:                    
-                        possible_sublists =(['.', 'M', '.'], ['T', 'M', '.'],   
-                                            ['.', '.', '.'], ['T', '.', '.'],  
-                                            ['.', '.', 'B'], ['T', '.', 'B'],
-                                            ['.', 'M', 'B'])                       
-                        target = self.get_col(col)
-                        for n in range(8):
-                            if target[n: n+3] in possible_sublists:
-                                starting_points.append(n)
+            if self.col_info[col][0] - self.col_info[col][3] >= 3:
+                if self.col_info[col][1] + self.col_info[col][2] >= 3:                    
+                    possible_sublists =(['.', 'M', '.'], ['T', 'M', '.'],   
+                                        ['.', '.', '.'], ['T', '.', '.'],  
+                                        ['.', '.', 'B'], ['T', '.', 'B'],
+                                        ['.', 'M', 'B'])                       
+                    target = self.get_col(col)
+                    for n in range(8):
+                        if target[n: n+3] in possible_sublists:
+                            starting_points.append(n)
             return starting_points
 
 
@@ -209,15 +205,14 @@ class Board:
         de onde um barco 2 pode começar"""
         if row <= 9 and row >= 0:
             starting_points = []
-            if self.row_info[row][0] >= 2:
-                if self.row_info[row][0] - self.row_info[row][3] >= 2:
-                    if self.row_info[row][1] + self.row_info[row][2] >= 2:
-                        possible_sublists =(['.', '.'], ['L', '.'],   
-                                            ['.', 'R'])                       
-                        target = self.get_row(row)
-                        for n in range(9):
-                            if target[n: n+2] in possible_sublists:
-                                starting_points.append(n)
+            if self.row_info[row][0] - self.row_info[row][3] >= 2:
+                if self.row_info[row][1] + self.row_info[row][2] >= 2:
+                    possible_sublists =(['.', '.'], ['L', '.'],   
+                                        ['.', 'R'])                       
+                    target = self.get_row(row)
+                    for n in range(9):
+                        if target[n: n+2] in possible_sublists:
+                            starting_points.append(n)
             return starting_points
 
     def boat2_col(self, col):
@@ -225,15 +220,14 @@ class Board:
         de onde um barco 2 pode começar"""
         if col <= 9 and col >= 0:
             starting_points = []
-            if self.col_info[col][0] >= 2:
-                if self.col_info[col][0] - self.col_info[col][3] >= 2:
-                    if self.col_info[col][1] + self.col_info[col][2] >= 2:
-                        possible_sublists =(['.', '.'], ['T', '.'],   
-                                            ['.', 'B'])                       
-                        target = self.get_col(col)
-                        for n in range(9):
-                            if target[n: n+2] in possible_sublists:
-                                starting_points.append(n)
+            if self.col_info[col][0] - self.col_info[col][3] >= 2:
+                if self.col_info[col][1] + self.col_info[col][2] >= 2:
+                    possible_sublists =(['.', '.'], ['T', '.'],   
+                                        ['.', 'B'])                       
+                    target = self.get_col(col)
+                    for n in range(9):
+                        if target[n: n+2] in possible_sublists:
+                            starting_points.append(n)
             return starting_points
     
 
@@ -476,14 +470,16 @@ class Bimaru(Problem):
         """Retorna uma lista de ações que podem ser executadas a
         partir do estado passado como argumento."""
         # TODO
-        
+        print("actions started")
         actions = [] #(boat_lenght, row, col, 0 or 1 ->(vertical or horizontal))
         if state == None:
             return actions
         board = state.board
+        board.print()
         available_boats = board.boats
 
         if available_boats['boat4'] != 0:
+            print("boat4")
             for n in range(board_size):
                 row_starting_coord = board.boat4_row(n)
                 col_starting_coord = board.boat4_col(n)
@@ -492,6 +488,7 @@ class Bimaru(Problem):
                 for row in col_starting_coord:
                     actions.append((4, row, n, 0))
         elif available_boats['boat3'] != 0:
+            print("boat3")
             for n in range(board_size):
                 row_starting_coord = board.boat3_row(n)
                 col_starting_coord = board.boat3_col(n)
@@ -500,6 +497,7 @@ class Bimaru(Problem):
                 for row in col_starting_coord:
                     actions.append((3, row, n, 0))
         elif available_boats['boat2'] != 0:
+            print("boat2")
             for n in range(board_size):
                 row_starting_coord = board.boat2_row(n)
                 col_starting_coord = board.boat2_col(n)
@@ -508,6 +506,7 @@ class Bimaru(Problem):
                 for row in col_starting_coord:
                     actions.append((2, row, n, 0))
         elif available_boats['boat1'] != 0:
+            print("boat1")
             for n in range(board_size):
                 row_starting_coord = board.boat1_row(n)
                 col_starting_coord = board.boat1_col(n)
@@ -517,6 +516,8 @@ class Bimaru(Problem):
                     actions.append((1, row, n, 0))
 
         print('returned actions =', actions)
+        print('actions finished')
+        print('', end='\n')
         return actions
                 
 
@@ -574,7 +575,7 @@ class Bimaru(Problem):
                 board.row_info[row][1] -= 1 #row empty -= 1
                 board.col_info[col][1] -= 1 #col empty -= 1
 
-                if board.row_info[row][0] > board.row_info[row][2] + board.row_info[row][3] or board.col_info[col][0] > board.col_info[col][2] + board.col_info[col][3]:
+                if board.row_info[row][0] < board.row_info[row][2] + board.row_info[row][3] or board.col_info[col][0] < board.col_info[col][2] + board.col_info[col][3]:
                     return None
                 
                 coord_to_water = around_coord(row, col, 'C')
@@ -716,7 +717,6 @@ class Bimaru(Problem):
 
                             for coord in coord_to_water:
                                 if valid_coord(coord[0], coord[1]):
-                                    print(board.grid[coord[0]][coord[1]])
                                     if board.grid[coord[0]][coord[1]] == '.':
                                         board.grid[coord[0]][coord[1]] = 'W'
                                         board.row_info[coord[0]][1] -= 1 #row empty -= 1
@@ -729,7 +729,6 @@ class Bimaru(Problem):
                     else:
                         print("n =", n)
                         if board.grid[row+n][col] == '.':
-                            print("got here")
                             board.grid[row+n][col] = 'M'
                             print("printed M")
                             board.row_info[row+n][1] -= 1 #row empty -= 1
@@ -766,6 +765,7 @@ class Bimaru(Problem):
         print("row_info", board.row_info)
         print("col_info", board.col_info)
         print("result finished")
+        print('', end='\n')
         return BimaruState(board)    
 
 
@@ -789,6 +789,7 @@ class Bimaru(Problem):
                     return False
                 if board.col_info[col][0] !=  board.col_info[col][2] + board.col_info[col][3]:
                     return False
+        print("passed goal test")
         return True
     
         """
