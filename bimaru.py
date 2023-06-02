@@ -15,16 +15,20 @@ from search import (
     depth_first_tree_search,
     greedy_search,
     recursive_best_first_search,
+    iterative_deepening_search,
 )
 import copy
 import time
 
+"""
+Blobal Variables
+"""
 board_size = 10
-board_pieces = ('W', 'C', 'T', 'M', 'B', 'L', 'R')
-
 hints=[]
 
-
+"""
+Auxiliar Functions
+"""
 def valid_coord(row, col):
     return row < board_size and row >= 0 and col < board_size and col >= 0
 
@@ -66,7 +70,9 @@ def around_coord(row, col, P):
         return -1
     
 
-         
+"""
+Classes
+"""
 
 class BimaruState:
     state_id = 0
@@ -283,11 +289,11 @@ class Board:
         if col <= 9 and col >= 0:
             return self.col_info[0]
         
-    def row_numb_pieces(self, row):
+    def row_numb_pieces_not_boats(self, row):
         if row <= 9 and row >= 0:
             return self.row_info[2]
     
-    def col_numb_pieces(self, col):
+    def col_numb_pieces_not_boats(self, col):
         if col <= 9 and col >= 0:
             return self.col_info[2]
         
@@ -298,6 +304,14 @@ class Board:
     def col_numb_empty(self, col):
         if col <= 9 and col >= 0:
             return self.col_info[1]
+    
+    def row_numb_boat_pieces(self, row):
+        if row <= 9 and row >= 0:
+            return self.row_info[3]
+    
+    def col_numb_boat_pieces(self, col):
+        if col <= 9 and col >= 0:
+            return self.col_info[3]
 
 
     @staticmethod
@@ -432,50 +446,7 @@ class Board:
                         print(piece.lower(), end='')
                 else:
                     print(piece, end='')
-            print('\n')
-    
-
-
-    # 1 if cell (row, col) contains symbol piece, 0 otherwise (x), -1 in case of error (x)
-    def is_value(self, row, col, piece): 
-        if not valid_coord(row, col):
-            return -1
-        if self.get_value(row, col) == piece:
-            return 1
-        else:
-            return 0
-        
-    #denotes the number of boats that has to be placed in the grid for each sort (S)
-    def available_boats(self, boat): 
-        return self.boats[boat]
-    
-    #1 if a boats of length l starts (i.e., has symbol L, T, or C) in cell (row, col), 0 otherwise, -1 in case of error (s)
-    def boat_start(self, row, col, l):
-        if not valid_coord(row, col):
-            return -1
-        start_piece = self.grid[row][col]
-        if start_piece == 'L':
-            if not valid_coord(row, col + l - 1):
-                return -1
-            if self.grid[row][col + l - 1] == 'R':    #maybe check the midle of the boat
-                return 1
-            else:
-                return 0
-        elif start_piece == 'T':
-            if not valid_coord(row + l -1, col):
-                return -1
-            if self.grid[row + l - 1][col] == 'R':    #maybe check the midle of the boat
-                return 1
-            else:
-                return 0
-        elif start_piece == 'C':
-            if l == 1:
-                return 1
-            else:
-                return 0
-        else:
-            return 0
-    
+            print('')
 
 
     # TODO: outros metodos da classe
@@ -817,56 +788,8 @@ class Bimaru(Problem):
                     return False
                 if board.grid[row][col] == 'R' and board.grid[row][col-1] == 'W':
                     return False
-        ("passed goal test")
+        #print("passed goal test")
         return True
-    
-        """
-        col_boat_parts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        count_boats = [0, 0, 0, 0] #[boat1, boat2, boat3, boat4]
-        for row in range(board_size):
-            count_row_boat_parts = 0
-            for col in range(board_size):
-                piece = board.grid[row][col]
-                initial_piece = self.initial_grid_piece(row, col)
-
-                if piece not in board_pieces:    #1
-                    return False
-                
-                if initial_piece in board_pieces:#2
-                    if piece == initial_piece:
-                        return False 
-                
-                if piece in board_pieces and piece != 'W':
-                    count_row_boat_parts += 1
-                    col_boat_parts[col] += 1
-
-                if piece == 'C': 
-                    if board.start_boat(row, col, 1) == 1: #5
-                        count_boats[0] += 1
-                    else:
-                        return False
-                
-                if piece != 'C': #5
-                    return board.start_boat(row, col, 1) == 0
-                
-                if piece == 'T' or piece == 'L': 
-                    if board.start_boat(row, col, 2) == 1: #6
-                        count_boats[1] += 1
-                    if board.start_boat(row, col, 3) == 1: #6
-                        count_boats[2] += 1
-                    if board.start_boat(row, col, 4) == 1: #6
-                        count_boats[3] += 1
-                    else:
-                        return False
-                
-            if count_row_boat_parts != board.row_restritions[row]: #3
-                return False
-            
-        if tuple(col_boat_parts) != board.col_restritions: #4
-            return False
-        if count_boats != [4, 3, 2, 1]: #7
-            return False
-        """        
 
     def h(self, node: Node):
         """Função heuristica utilizada para a procura A*."""
@@ -874,9 +797,10 @@ class Bimaru(Problem):
         pass
 
     # TODO: outros metodos da classe
-    def initial_grid_piece(self, row, col):
-        return self.initial.board.get_value(row, col)
 
+"""
+Main
+"""
 
 if __name__ == "__main__":
     # TODO:
