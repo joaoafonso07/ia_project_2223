@@ -2,7 +2,7 @@
 # Devem alterar as classes e funções neste ficheiro de acordo com as instruções do enunciado.
 # Além das funções e classes já definidas, podem acrescentar outras que considerem pertinentes.
 
-# Grupo 00:
+# Grupo 64:
 # ist1102779 João Afonso Mestre
 # ist1 Miguel Benjamim 
 
@@ -21,6 +21,8 @@ import time
 
 board_size = 10
 board_pieces = ('W', 'C', 'T', 'M', 'B', 'L', 'R')
+
+hints=[]
 
 
 def valid_coord(row, col):
@@ -335,6 +337,8 @@ class Board:
 
             row = int(hint[1])
             col = int(hint[2])
+
+            hints.append((row, col))
             
             grid[row][col] = hint[3]
 
@@ -409,9 +413,25 @@ class Board:
         return Board(row_info = row_info, col_info = col_info, grid = grid, boats = boats)
     
     def print(self):
+        """
         for row in self.grid:
             for i in row:
                 print(i, end='')
+            print('\n')
+        """
+
+        for row in range(board_size):
+            for col in range(board_size):
+                piece = self.grid[row][col]
+                if  (row,col) not in hints:
+                    if piece == 'W':
+                        print('.', end='')
+                    elif piece == '.':
+                        print('_', end='')
+                    else:
+                        print(piece.lower(), end='')
+                else:
+                    print(piece, end='')
             print('\n')
     
 
@@ -470,16 +490,16 @@ class Bimaru(Problem):
         """Retorna uma lista de ações que podem ser executadas a
         partir do estado passado como argumento."""
         # TODO
-        print("actions started")
+        #print("actions started")
         actions = [] #(boat_lenght, row, col, 0 or 1 ->(vertical or horizontal))
         if state == None:
             return actions
         board = state.board
-        board.print()
+        #board.print
         available_boats = board.boats
 
         if available_boats['boat4'] != 0:
-            print("boat4")
+            #print("boat4")
             for n in range(board_size):
                 row_starting_coord = board.boat4_row(n)
                 col_starting_coord = board.boat4_col(n)
@@ -488,7 +508,7 @@ class Bimaru(Problem):
                 for row in col_starting_coord:
                     actions.append((4, row, n, 0))
         elif available_boats['boat3'] != 0:
-            print("boat3")
+            #print("boat3")
             for n in range(board_size):
                 row_starting_coord = board.boat3_row(n)
                 col_starting_coord = board.boat3_col(n)
@@ -497,7 +517,7 @@ class Bimaru(Problem):
                 for row in col_starting_coord:
                     actions.append((3, row, n, 0))
         elif available_boats['boat2'] != 0:
-            print("boat2")
+            #print("boat2")
             for n in range(board_size):
                 row_starting_coord = board.boat2_row(n)
                 col_starting_coord = board.boat2_col(n)
@@ -506,7 +526,7 @@ class Bimaru(Problem):
                 for row in col_starting_coord:
                     actions.append((2, row, n, 0))
         elif available_boats['boat1'] != 0:
-            print("boat1")
+            #print("boat1")
             for n in range(board_size):
                 row_starting_coord = board.boat1_row(n)
                 col_starting_coord = board.boat1_col(n)
@@ -515,9 +535,9 @@ class Bimaru(Problem):
                 for row in col_starting_coord:
                     actions.append((1, row, n, 0))
 
-        print('returned actions =', actions)
-        print('actions finished')
-        print('', end='\n')
+        #print('returned actions =', actions)
+        #print('actions finished')
+        #print('', end='\n')
         return actions
                 
 
@@ -527,7 +547,7 @@ class Bimaru(Problem):
         das presentes na lista obtida pela execução de
         self.actions(state)."""
         # TODO
-        print("started result")
+        #print("started result")
         board = copy.deepcopy(state.board)
         boat_lenght = action[0]
         row = action[1]
@@ -558,15 +578,15 @@ class Bimaru(Problem):
             board.row_info[row][3] += 1
             board.col_info[col][3] += 1
 
-        print("boat 4", board.boats['boat4'] )
-        print("boat 3", board.boats['boat3'] )
-        print("boat 2", board.boats['boat2'] )
-        print("boat 1", board.boats['boat1'] )
+        #print("boat 4", board.boats['boat4'] )
+        #print("boat 3", board.boats['boat3'] )
+        #print("boat 2", board.boats['boat2'] )
+        #print("boat 1", board.boats['boat1'] )
 
 
-        print("boat_lenght=", boat_lenght)
-        print("direction=", direction)
-        print("row, col = ", row, col)
+        #print("boat_lenght=", boat_lenght)
+        #print("direction=", direction)
+        #print("row, col = ", row, col)
 
         if boat_lenght == 1:
             if board.grid[row][col] == '.':
@@ -587,7 +607,7 @@ class Bimaru(Problem):
                             board.row_info[coord[0]][1] -= 1
                             board.col_info[coord[1]][1] -= 1
                         elif board.grid[coord[0]][coord[1]] != 'W':
-                            print("result returned null")
+                            #print("result returned null")
                             return None
         else:
             if direction: #if horizontal
@@ -595,7 +615,7 @@ class Bimaru(Problem):
                     if n == 0:
                         if board.grid[row][col+n] == '.':
                             board.grid[row][col+n] = 'L'
-                            print("printed L")
+                            #print("printed L")
                             
                             board.row_info[row][1] -= 1 #row empty -= 1
                             board.col_info[col+n][1] -= 1 #col empty -= 1
@@ -614,7 +634,7 @@ class Bimaru(Problem):
                                         board.row_info[coord[0]][1] -= 1
                                         board.col_info[coord[1]][1] -= 1
                                     elif board.grid[coord[0]][coord[1]] != 'W':
-                                        print("result returned null")
+                                        #print("result returned null")
                                         return None
                         else:
                             board.row_info[row][2] -= 1 #col pieces not boat -= 1
@@ -622,7 +642,7 @@ class Bimaru(Problem):
                     elif n == boat_lenght - 1:
                         if board.grid[row][col+n] == '.':
                             board.grid[row][col+n] = 'R' 
-                            print("printed R")
+                            #print("printed R")
 
                             board.row_info[row][1] -= 1 #row empty -= 1
                             board.col_info[col+n][1] -= 1 #col empty -= 1
@@ -641,14 +661,14 @@ class Bimaru(Problem):
                                         board.row_info[coord[0]][1] -= 1 #row empty -= 1
                                         board.col_info[coord[1]][1] -= 1 #col empty -= 1
                                     elif board.grid[coord[0]][coord[1]] != 'W':
-                                        print("result returned null")
+                                        #print("result returned null")
                                         return None
                         else:
                             board.row_info[row][2] -= 1 #col pieces not boat -= 1
                     else:
                         if board.grid[row][col+n] == '.':
                             board.grid[row][col+n] = 'M'
-                            print("printed M")
+                            #print("printed M")
                             board.row_info[row][1] -= 1 #row empty -= 1
                             board.col_info[col+n][1] -= 1 #col empty -= 1
                             
@@ -666,17 +686,17 @@ class Bimaru(Problem):
                                         board.row_info[coord[0]][1] -= 1
                                         board.col_info[coord[1]][1] -= 1
                                     elif board.grid[coord[0]][coord[1]] != 'W':
-                                        print("result returned null")
+                                        #print("result returned null")
                                         return None
                         else:
                             board.row_info[row][2] -= 1 #col pieces not boat -= 1
             else: #vertical
                 for n in range(boat_lenght):
                     if n == 0:
-                        print("n =", n)
+                        #print("n =", n)
                         if board.grid[row+n][col] == '.':
                             board.grid[row+n][col] = 'T'
-                            print("printed T")
+                            #print("printed T")
 
                             board.row_info[row+n][1] -= 1 #row empty -= 1
                             board.col_info[col][1] -= 1 #col empty -= 1
@@ -695,16 +715,16 @@ class Bimaru(Problem):
                                         board.row_info[coord[0]][1] -= 1 #row empty -= 1
                                         board.col_info[coord[1]][1] -= 1 #col empty -= 1
                                     elif board.grid[coord[0]][coord[1]] != 'W':
-                                        print("result returned null T")
+                                        #print("result returned null T")
                                         return None
                         else:
                             board.col_info[col][2] -= 1 #col pieces not boat -= 1
 
                     elif n == boat_lenght - 1:
-                        print("n =", n)
+                        #print("n =", n)
                         if board.grid[row+n][col] == '.':
                             board.grid[row+n][col] = 'B' 
-                            print("printed B")
+                            #print("printed B")
                             board.row_info[row+n][1] -= 1 #row empty -= 1
                             board.col_info[col][1] -= 1 #col empty -= 1
                             
@@ -722,15 +742,15 @@ class Bimaru(Problem):
                                         board.row_info[coord[0]][1] -= 1 #row empty -= 1
                                         board.col_info[coord[1]][1] -= 1 #col empty -= 1
                                     elif board.grid[coord[0]][coord[1]] != 'W':
-                                        print("result returned null B")
+                                        #print("result returned null B")
                                         return None
                         else:
                             board.col_info[col][2] -= 1 #col pieces not boat -= 1
                     else:
-                        print("n =", n)
+                        #print("n =", n)
                         if board.grid[row+n][col] == '.':
                             board.grid[row+n][col] = 'M'
-                            print("printed M")
+                            #print("printed M")
                             board.row_info[row+n][1] -= 1 #row empty -= 1
                             board.col_info[col][1] -= 1 #col empty -= 1
                             
@@ -743,29 +763,29 @@ class Bimaru(Problem):
 
                             for coord in coord_to_water:
                                 if valid_coord(coord[0], coord[1]):
-                                    print(board.grid[coord[0]][coord[1]])
+                                    #print(board.grid[coord[0]][coord[1]])
                                     if board.grid[coord[0]][coord[1]] == '.':
                                         board.grid[coord[0]][coord[1]] = 'W'
                                         board.row_info[coord[0]][1] -= 1 #row empty -= 1
                                         board.col_info[coord[1]][1] -= 1 #col empty -= 1
                                     elif board.grid[coord[0]][coord[1]] != 'W':
-                                        print("result returned null M")
+                                        #print("result returned null M")
                                         return None
                         else:
                             board.col_info[col][2] -= 1 #col pieces not boat -= 1
         
 
-        print("Board before water_lines")
-        board.print()
-        print("row_info", board.row_info)
-        print("col_info", board.col_info)
+        #print("Board before water_lines")
+        #board.print
+        #print("row_info", board.row_info)
+        #print("col_info", board.col_info)
         board.water_lines()
-        print("Board after water_lines")
-        board.print()
-        print("row_info", board.row_info)
-        print("col_info", board.col_info)
-        print("result finished")
-        print('', end='\n')
+        #print("Board after water_lines")
+        #board.print
+        #print("row_info", board.row_info)
+        #print("col_info", board.col_info)
+        #print("result finished")
+        #print('', end='\n')
         return BimaruState(board)    
 
 
@@ -789,7 +809,15 @@ class Bimaru(Problem):
                     return False
                 if board.col_info[col][0] !=  board.col_info[col][2] + board.col_info[col][3]:
                     return False
-        print("passed goal test")
+                if board.grid[row][col] == 'T' and board.grid[row+1][col] == 'W':
+                    return False
+                if board.grid[row][col] == 'B' and board.grid[row-1][col] == 'W':
+                    return False
+                if board.grid[row][col] == 'L' and board.grid[row][col+1] == 'W':
+                    return False
+                if board.grid[row][col] == 'R' and board.grid[row][col-1] == 'W':
+                    return False
+        ("passed goal test")
         return True
     
         """
@@ -858,7 +886,8 @@ if __name__ == "__main__":
     # Imprimir para o standard output no formato indicado.
     start = time.perf_counter()
     board = Board.parse_instance()
-    board.print()
+    #board.print
     problem = Bimaru(board)
     goal_node = depth_first_tree_search(problem)
     goal_node.state.board.print()
+    #print(time.perf_counter()-start)
