@@ -4,7 +4,7 @@
 
 # Grupo 64:
 # ist1102779 João Afonso Mestre
-# ist1 Miguel Benjamim 
+# ist1103560 Miguel Benjamim 
 
 import sys
 from search import (
