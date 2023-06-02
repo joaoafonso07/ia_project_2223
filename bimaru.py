@@ -63,8 +63,12 @@ def around_coord(row, col, P):
     else:
         return -1
     
-
-         
+def positions(s, i, t):
+        res = []
+        if i > t:
+            for j in range (i):
+                res.append(s+j)
+        return res
 
 class BimaruState:
     state_id = 0
@@ -121,99 +125,97 @@ class Board:
                         self.grid[row][col] = 'W'
                         self.row_info[row][1] -= 1 #row empty -= 1
                         self.col_info[col][1] -= 1 #col empty -= 1
-    
-    def positions(s, i, t):
-        res = []
-        if i > t:
-            for j in range (i):
-                res.append(s+j)
-        return res
+
 
     def available_places_row(self, row, size):
-        b = False; s = 0; i = 0; j = 0; places = []
-        while j < 10:
-            if row[j] == '.':
-                while row[j] == '.' or row[j] == 'M' and j < 10:
-                    j+=1
-                    i+=1
-                    if row[j] == 'R':
-                        i+=1
-                places.append(self.positions(s, i, size))
-                s+=i
-                i=0
-            if row[j] == 'L':
-                while row[j] == '.' or row[j] == 'M' and j < 10:
-                    if row[j] == '.':
-                        b = True
-                    j+=1
-                    i+=1
-                    if row[j] == 'R':
-                        i+=1
-                if b and i > 4:
-                    places.append(s)
-                    s+=2
-                    i-=2
-                    places.append(self.positions(s, i, size))
-                b = False
-                s+=i
-                i = 0
-            j+=1
-            s+=1
-        return places
+        if row <= 9 and row >= 0:
+            if self.row_info[row][0] - self.row_info[row][3] >= size: #remaining pieces >= size
+                if self.row_info[row][1] + self.row_info[row][2] >= size:
+                    b = False; s = 0; i = 0; j = 0; places = []
+                    while j < 10:
+                        if self.grid[row][j] == '.':
+                            while self.grid[row][j] == '.' or self.grid[row][j] == 'M' and j < 10:
+                                j+=1
+                                i+=1
+                                if self.grid[row][j] == 'R':
+                                    i+=1
+                            places.append(positions(s, i, size))
+                            s+=i
+                            i=0
+                        if self.grid[row][j] == 'L':
+                            while self.grid[row][j] == '.' or self.grid[row][j] == 'M' and j < 10:
+                                if self.grid[row][j] == '.':
+                                    b = True
+                                j+=1
+                                i+=1
+                                if self.grid[row][j] == 'R':
+                                    i+=1
+                            if b and i > 4:
+                                places.append(s)
+                                s+=2
+                                i-=2
+                                places.append(positions(s, i, size))
+                            b = False
+                            s+=i
+                            i = 0
+                        j+=1
+                        s+=1
+                    return places
     
-    def available_places_collum(self, collum, size):
-        b = False; s = 0; i = 0; j = 0; places = []
-        while j < 10:
-            if collum[j] == '.':
-                while collum[j] == '.' or collum[j] == 'M' and j < 10:
-                    j+=1
-                    i+=1
-                    if collum[j] == 'R':
-                        i+=1
-                places.append(self.positions(s, i, size))
-                s+=i
-                i=0
-            if collum[j] == 'L':
-                while collum[j] == '.' or collum[j] == 'M' and j < 10:
-                    if collum[j] == '.':
-                        b = True
-                    j+=1
-                    i+=1
-                    if collum[j] == 'R':
-                        i+=1
-                if b and i > 4:
-                    places.append(s)
-                    s+=2
-                    i-=2
-                    places.append(self.positions(s, i, size))
-                b = False
-                s+=i
-                i = 0
-            j+=1
-            s+=1
-        return places
+    def available_places_col(self, col, size):
+        if col <= 9 and col >= 0:
+            if self.col_info[col][0] - self.col_info[col][3] >= size:
+                if self.col_info[col][1] + self.col_info[col][2] >= size:
+                    b = False; s = 0; i = 0; j = 0; places = []
+                    while j < 10:
+                        if self.grid[j][col] == '.':
+                            while self.grid[j][col] == '.' or self.grid[j][col] == 'M' and j < 10:
+                                j+=1
+                                i+=1
+                                if self.grid[j][col] == 'B':
+                                    i+=1
+                            places.append(positions(s, i, size))
+                            s+=i
+                            i=0
+                        if self.grid[j][col] == 'T':
+                            while self.grid[j][col] == '.' or self.grid[j][col] == 'M' and j < 10:
+                                if self.grid[j][col] == '.':
+                                    b = True
+                                j+=1
+                                i+=1
+                                if self.grid[j][col] == 'B':
+                                    i+=1
+                            if b and i > 4:
+                                places.append(s)
+                                s+=2
+                                i-=2
+                                places.append(positions(s, i, size))
+                            b = False
+                            s+=i
+                            i = 0
+                        j+=1
+                        s+=1
+                    return places
     
 
     def boat_row(self, row, size):
         """Para uma determinada linha retorna os indices 
         de onde um barco 4 pode começar"""
         if row <= 9 and row >= 0:
-            if self.row_info[row][0] >= size: #row restriction >= 4
-                if self.row_info[row][0] - self.row_info[row][3] >= size:
-                    if self.row_info[row][1] + self.row_info[row][2] >= size:                    
-                        for n in range(board_size-size+1):
-                            starting_points = self.available_places_row(n, size)                
+            if self.row_info[row][0] - self.row_info[row][3] >= size: #remaining pieces >= size
+                if self.row_info[row][1] + self.row_info[row][2] >= size:                    
+                    for n in range(board_size-size+1):
+                        starting_points = self.available_places_row(n, size)                
             return starting_points
 
-    def boat_row(self, collum, size):
+    def boat_col(self, col, size):
         """Para uma determinada linha retorna os indices 
         de onde um barco 4 pode começar"""
-        if collum <= 9 and collum >= 0:
-            if self.col_info[collum][0] >= size: #row restriction >= 4
-                if self.col_info[collum][0] - self.col_info[collum][3] >= size:
-                    if self.col_info[collum][1] + self.col_info[collum][2] >= size:                    
-                        for n in range(board_size-size+1):
-                            starting_points = self.available_places_collum(n, size)                
+        if col <= 9 and col >= 0:
+            if self.col_info[col][0] - self.col_info[col][3] >= size:
+                if self.col_info[col][1] + self.col_info[col][2] >= size:                    
+                    for n in range(board_size-size+1):
+                        starting_points = self.available_places_col(n, size)                
             return starting_points             
     
 
@@ -529,24 +531,24 @@ class Bimaru(Problem):
 
         if available_boats['boat4'] != 0:
             for n in range(board_size):
-                row_starting_coord = board.boat_row(n, 4)
-                col_starting_coord = board.boat_col(n, 4)
+                row_starting_coord = board.available_places_row(n, 4)
+                col_starting_coord = board.available_places_col(n, 4)
                 for col in row_starting_coord:
                     actions.append((4, n, col, 1))
                 for row in col_starting_coord:
                     actions.append((4, row, n, 0))
         elif available_boats['boat3'] != 0:
             for n in range(board_size):
-                row_starting_coord = board.boat_row(n, 3)
-                col_starting_coord = board.boat_col(n, 3)
+                row_starting_coord = board.available_places_row(n, 3)
+                col_starting_coord = board.available_places_col(n, 3)
                 for col in row_starting_coord:
                     actions.append((3, n, col, 1))
                 for row in col_starting_coord:
                     actions.append((3, row, n, 0))
         elif available_boats['boat2'] != 0:
             for n in range(board_size):
-                row_starting_coord = board.boat_row(n, 2)
-                col_starting_coord = board.boat_col(n, 2)
+                row_starting_coord = board.available_places_row(n, 2)
+                col_starting_coord = board.available_places_col(n, 2)
                 for col in row_starting_coord:
                     actions.append((2, n, col, 1))
                 for row in col_starting_coord:
