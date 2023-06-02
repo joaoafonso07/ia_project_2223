@@ -122,55 +122,27 @@ class Board:
                         self.row_info[row][1] -= 1 #row empty -= 1
                         self.col_info[col][1] -= 1 #col empty -= 1
     
-    def positions(s, i, t):
-        res = []
-        if i > t:
-            for j in range (i):
-                res.append(s+j)
-        return res
-
-    def available_places_row(self, row, size):
-        b = False; s = 0; i = 0; j = 0; places = []
-        while j < 10:
-            if row[j] == '.':
-                while row[j] == '.' or row[j] == 'M' and j < 10:
-                    j+=1
-                    i+=1
-                    if row[j] == 'R':
-                        i+=1
-                places.append(self.positions(s, i, size))
-                s+=i
-                i=0
-            if row[j] == 'L':
-                while row[j] == '.' or row[j] == 'M' and j < 10:
-                    if row[j] == '.':
-                        b = True
-                    j+=1
-                    i+=1
-                    if row[j] == 'R':
-                        i+=1
-                if b and i > 4:
-                    places.append(s)
-                    s+=2
-                    i-=2
-                    places.append(self.positions(s, i, size))
-                b = False
-                s+=i
-                i = 0
-            j+=1
-            s+=1
-        return places
-        
 
     def boat4_row(self, row):
         """Para uma determinada linha retorna os indices 
         de onde um barco 4 pode começar"""
         if row <= 9 and row >= 0:
+            starting_points = []
             if self.row_info[row][0] >= 4: #row restriction >= 4
                 if self.row_info[row][0] - self.row_info[row][3] >=4 :
                     if self.row_info[row][1] + self.row_info[row][2] >= 4:                    
+                        possible_sublists =(['.', '.', '.', '.'], ['L', '.', '.', '.'],
+                                            ['.', 'M', '.', '.'], ['L', 'M', '.', '.'],  
+                                            ['.', 'M', 'M', '.'], ['L', 'M', 'M', '.'], 
+                                            ['.', 'M', 'M', 'R'], ['L', '.', '.', 'R'],  
+                                            ['.', 'M', '.', 'R'], ['L', 'M', '.', 'R'], 
+                                            ['.', '.', 'M', 'R'], ['L', '.', 'M', 'R'],  
+                                            ['.', '.', '.', 'R'], ['L', '.', 'M', '.'], 
+                                            ['.', '.', 'M', '.'])
+                        target = self.get_row(row)
                         for n in range(7):
-                            starting_points = self.available_places_row(n,4)                
+                            if target[n: n+4] in possible_sublists:
+                                starting_points.append(n)
             return starting_points
 
     def boat4_col(self, col):
@@ -199,11 +171,18 @@ class Board:
         """Para uma determinada linha retorna os indices 
         de onde um barco 3 pode começar"""
         if row <= 9 and row >= 0:
+            starting_points = []
             if self.row_info[row][0] >= 3:
                 if self.row_info[row][0] - self.row_info[row][3] >= 3:
                     if self.row_info[row][1] + self.row_info[row][2] >= 3:
+                        possible_sublists =(['.', 'M', '.'], ['L', 'M', '.'],   
+                                            ['.', '.', '.'], ['L', '.', '.'],  
+                                            ['.', '.', 'R'], ['L', '.', 'R'],
+                                            ['.', 'M', 'R'])                       
+                        target = self.get_row(row)
                         for n in range(8):
-                            starting_points = self.available_places_row(n,3)                                
+                            if target[n: n+3] in possible_sublists:
+                                starting_points.append(n)
             return starting_points
 
     def boat3_col(self, col):
