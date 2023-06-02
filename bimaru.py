@@ -4,7 +4,7 @@
 
 # Grupo 00:
 # ist1102779 João Afonso Mestre
-# ist1 Miguel Benjamim 
+# ist1103560 Miguel Benjamim 
 
 import sys
 from search import (
@@ -20,7 +20,8 @@ import copy
 import time
 
 board_size = 10
-board_pieces = ('W', 'C', 'T', 'M', 'B', 'L', 'R')
+
+hints=[]
 
 
 def valid_coord(row, col):
@@ -387,6 +388,8 @@ class Board:
 
             row = int(hint[1])
             col = int(hint[2])
+
+            hints.append((row, col))
             
             grid[row][col] = hint[3]
 
@@ -461,9 +464,19 @@ class Board:
         return Board(row_info = row_info, col_info = col_info, grid = grid, boats = boats)
     
     def print(self):
-        for row in self.grid:
-            for i in row:
-                print(i, end='')
+        
+        for row in range(board_size):
+            for col in range(board_size):
+                piece = self.grid[row][col]
+                if  (row,col) not in hints:
+                    if piece == 'W':
+                        print('.', end='')
+                    elif piece == '.':
+                        print('_', end='')
+                    else:
+                        print(piece.lower(), end='')
+                else:
+                    print(piece, end='')
             print('\n')
     
 
