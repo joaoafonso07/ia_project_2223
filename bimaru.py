@@ -554,7 +554,7 @@ class Bimaru(Problem):
         #print("boat 2", board.boats['boat2'] )
         #print("boat 1", board.boats['boat1'] )
 
-
+        #board.print()
         #print("boat_lenght=", boat_lenght)
         #print("direction=", direction)
         #print("row, col = ", row, col)
@@ -567,6 +567,7 @@ class Bimaru(Problem):
                 board.col_info[col][1] -= 1 #col empty -= 1
 
                 if board.row_info[row][0] < board.row_info[row][2] + board.row_info[row][3] or board.col_info[col][0] < board.col_info[col][2] + board.col_info[col][3]:
+                    #print("WorkedC")
                     return None
                 
                 coord_to_water = around_coord(row, col, 'C')
@@ -594,6 +595,7 @@ class Bimaru(Problem):
                             board.col_info[col+n][2] += 1 #col pieces not boat += 1
 
                             if board.col_info[col+n][0] < board.col_info[col+n][2] + board.col_info[col+n][3]:
+                                #print("WorkedL")
                                 return None
 
                             coord_to_water = around_coord(row, col + n, 'L')
@@ -621,6 +623,7 @@ class Bimaru(Problem):
                             board.col_info[col+n][2] += 1 #col pieces not boat += 1
 
                             if board.col_info[col+n][0] < board.col_info[col+n][2] + board.col_info[col+n][3]:
+                                #print("WorkedR")
                                 return None
 
                             coord_to_water = around_coord(row, col + n, 'R')
@@ -646,6 +649,7 @@ class Bimaru(Problem):
                             board.col_info[col+n][2] += 1 #col pieces not boat += 1
 
                             if board.col_info[col+n][0] < board.col_info[col+n][2] + board.col_info[col+n][3]:
+                                #print("WorkedM")
                                 return None
 
                             coord_to_water = around_coord(row, col + n, 'M')
@@ -661,6 +665,8 @@ class Bimaru(Problem):
                                         return None
                         else:
                             board.row_info[row][2] -= 1 #col pieces not boat -= 1
+                if board.row_info[row][0] < board.row_info[row][2] + board.row_info[row][3]:
+                    return None
             else: #vertical
                 for n in range(boat_lenght):
                     if n == 0:
@@ -675,6 +681,7 @@ class Bimaru(Problem):
                             board.row_info[row+n][2] += 1 #row pieces not boat += 1
 
                             if board.row_info[row+n][0] < board.row_info[row+n][2] + board.row_info[row+n][3]:
+                                #print("WorkedT")
                                 return None
 
                             coord_to_water = around_coord(row+n, col, 'T')
@@ -702,6 +709,7 @@ class Bimaru(Problem):
                             board.row_info[row+n][2] += 1 #row pieces not boat += 1
 
                             if board.row_info[row+n][0] < board.row_info[row+n][2] + board.row_info[row+n][3]:
+                                #print("WorkedB")
                                 return None
 
                             coord_to_water = around_coord(row+n, col, 'B')
@@ -728,6 +736,7 @@ class Bimaru(Problem):
                             board.row_info[row+n][2] += 1 #row pieces not boat += 1
 
                             if board.row_info[row+n][0] < board.row_info[row+n][2] + board.row_info[row+n][3]:
+                                #print("WorkedM")
                                 return None
 
                             coord_to_water = around_coord(row+n, col, 'M')
@@ -744,7 +753,8 @@ class Bimaru(Problem):
                                         return None
                         else:
                             board.col_info[col][2] -= 1 #col pieces not boat -= 1
-        
+                if board.col_info[col][0] < board.col_info[col][2] + board.col_info[col][3]:
+                    return None
 
         #print("Board before water_lines")
         #board.print
