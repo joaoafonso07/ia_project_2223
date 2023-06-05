@@ -19,6 +19,7 @@ from search import (
 )
 import copy
 import time
+import random
 
 """
 Blobal Variables
@@ -358,7 +359,8 @@ class Board:
 
             hints.append((row, col))
             
-            grid[row][col] = piece
+    
+            
 
             if piece != 'W':
                 row_info[row][2] += 1 # row pieces not boat += 1
@@ -390,9 +392,15 @@ class Board:
                         grid[row][col-1] = '!'
                     if valid_coord(row, col-2) and grid[row][col-2] == '.':
                         grid[row][col-2] = '?'
-        
-            row_info[row][1] -= 1 #row empty -= 1
-            col_info[col][1] -= 1 #col empty -= 1
+            #print((row,col))
+            #print('Hrow_info =', row_info)
+            if grid[row][col] != 'W':
+                row_info[row][1] -= 1 #row empty -= 1
+                #print('Hcol_info =', col_info)
+                #print('')
+                col_info[col][1] -= 1 #col empty -= 1
+
+            grid[row][col] = piece
 
             
 
@@ -402,7 +410,11 @@ class Board:
                 if valid_coord(coord[0], coord[1]):
                     if grid[coord[0]][coord[1]] in ('.', '?'):
                         grid[coord[0]][coord[1]] = 'W'
+                        #print((coord[0],coord[1]))
+                        #print('Prow_info =', row_info)
                         row_info[coord[0]][1] -= 1 #row empty -= 1
+                        #print('Pcol_info =', col_info)
+                        #print('')
                         col_info[coord[1]][1] -= 1 #col empty -= 1
                     
         
@@ -441,10 +453,13 @@ class Board:
                                     boats['boat4'] -= 1
                                     row_info[2] -= 4 #row pieces not boat -= 4
                                     row_info[3] += 4 #row boat pieces += 4
-                elif grid[row][col] == '.':
+                elif grid[row][col] in ('.', '?'):
                     if row_info[row][0] == row_info[row][2] + row_info[row][3] or col_info[col][0] == col_info[col][2] + col_info[col][3]:
                         grid[row][col] = 'W'
+                        #print('Wrow_info =', row_info)
                         row_info[row][1] -= 1 #row empty -= 1
+                        #print('Wcol_info =', col_info)
+                        #print('')
                         col_info[col][1] -= 1 #col empty -= 1
                     
 
@@ -538,7 +553,12 @@ class Bimaru(Problem):
             if len(actions) < available_boats['boat1']:
                 #print("returned []")
                 return []
-
+            
+            
+        #SEED = 676543345234543
+        #random.seed(SEED)
+        #random. shuffle(actions)
+        
         #print('returned actions =', actions)
         #print('actions finished')
         #print('', end='\n')
@@ -607,7 +627,7 @@ class Bimaru(Problem):
 
                 for coord in coord_to_water:
                     if valid_coord(coord[0], coord[1]):
-                        if board.grid[coord[0]][coord[1]] == '.':
+                        if board.grid[coord[0]][coord[1]] in ('.','?'):
                             board.grid[coord[0]][coord[1]] = 'W'
                             board.row_info[coord[0]][1] -= 1
                             board.col_info[coord[1]][1] -= 1
@@ -795,6 +815,18 @@ class Bimaru(Problem):
         #print("col_info", board.col_info)
         if board.water_lines() == -1:
             return None
+        
+        for e in range(10):
+            if board.row_info[e][0] > board.row_info[e][1] + board.row_info[e][2] + board.row_info[e][3]:
+                #print('result returned confirming row ', e)
+                return None
+            if board.col_info[e][0] > board.col_info[e][1] + board.col_info[e][2] + board.col_info[e][3]:
+                #print('col restrition = ', board.col_info[e][0])
+                #print('col empty = ', board.col_info[e][1])
+                #print('col pieces not boat = ', board.col_info[e][2])
+                #print('col boat pieces = ', board.col_info[e][3])
+                #print('result returned confirming col ', e)
+                return None
         #print("Board after water_lines")
         #board.print()
         #print("row_info", board.row_info)
@@ -818,7 +850,7 @@ class Bimaru(Problem):
         
         for row in range(board_size):
             for col in range(board_size):
-                if board.grid[row][col] == '.':
+                if board.grid[row][col] in ('.', '?', '!'):
                     return False
                 if board.row_info[row][0] !=  board.row_info[row][2] + board.row_info[row][3]:
                     return False
@@ -855,6 +887,8 @@ if __name__ == "__main__":
     start = time.perf_counter()
     board = Board.parse_instance()
     #board.print()
+    #print('row_info =', board.row_info)
+    #print('col_info =', board.col_info)
     problem = Bimaru(board)
     goal_node = depth_first_tree_search(problem)
     goal_node.state.board.print()
